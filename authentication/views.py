@@ -3,6 +3,10 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from authentication.forms import LoginForm, SignUpForm
+from django.contrib.auth.models import User
+
+from core.settings import DEBUG
+from random import randint
 
 def login_view(request):
     form = LoginForm(request.POST or None)
@@ -17,7 +21,10 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("/")
+                if DEBUG:
+                    return redirect("login")
+                else:
+                    return redirect("/")
             else:    
                 msg = 'Invalid credentials'    
         else:
@@ -34,9 +41,25 @@ def register_user(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get("username")
-            raw_password = form.cleaned_data.get("password1")
-            # user = authenticate(username=username, password=raw_password)
+            first_name = form.cleaned_data.get("first_name")
+            last_name = form.cleaned_data.get("last_name")
+            username = form.cleaned_data.get("first_name").lower()[0] + form.cleaned_data.get("last_name").lower()
+
+            try:
+                usr_obj = User.objects.get(first_name=first_name, last_name=last_name, username="")
+            except Exception as e:
+                print(e)
+            else:
+                if DEBUG:
+                    usr_obj.username = username
+                    usr_obj.save()
+                    user = authenticate(username=username, password=form.cleaned_data.get("password1"))
+                    login(request, user)
+                    return redirect("/login/")
+                else: 
+                    # this means we have to setup a temporary username
+                    usr_obj.username = str(randint(1,1000))
+                    usr_obj.save()
 
             msg     = 'User created - please provide documentation for verification'
             success = True
