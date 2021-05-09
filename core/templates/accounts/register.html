@@ -1,8 +1,7 @@
-
 {% extends "layouts/base.html" %}
 
 {% block title %} Login {% endblock title %}
-
+ 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
@@ -11,25 +10,6 @@
     <div class="page-inner">
         <div class="page-header">
             <h4 class="page-title">Register</h4>
-            <ul class="breadcrumbs">
-                <li class="nav-home">
-                    <a href="#">
-                        <i class="flaticon-home"></i>
-                    </a>
-                </li>
-                <li class="separator">
-                    <i class="flaticon-right-arrow"></i>
-                </li>
-                <li class="nav-item">
-                    <a href="#">Authentication</a>
-                </li>
-                <li class="separator">
-                    <i class="flaticon-right-arrow"></i>
-                </li>
-                <li class="nav-item">
-                    <a href="#">Register</a>
-                </li>
-            </ul>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -63,10 +43,22 @@
                                                     <i class="icon-user"></i>
                                                 </span>
                                             </div>
-                                            {{ form.username }}
+                                            {{ form.first_name }}
                                         </div>
                                     </div>
-                                    <span class="text-danger">{{ form.username.errors }}</span>
+                                    <span class="text-danger">{{ form.first_name.errors }}</span>
+
+                                    <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">
+                                                    <i class="icon-user"></i>
+                                                </span>
+                                            </div>
+                                            {{ form.last_name }}
+                                        </div>
+                                    </div>
+                                    <span class="text-danger">{{ form.last_name.errors }}</span>
 
                                     <div class="form-group">
                                         <div class="input-group mb-3">
