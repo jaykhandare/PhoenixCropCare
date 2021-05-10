@@ -22,5 +22,5 @@ urlpatterns = [
     # user authentication
     path("", include("authentication.urls")),
     # user management 
-    # path("", include("user_management.urls")),
+    path("", include("user_management.urls")),
 ]
