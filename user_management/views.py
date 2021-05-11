@@ -2,9 +2,12 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
+from PIL import Image
+from os import path
 
 from user_management.models import UserProfile
-from core.settings import DEBUG
+from core.settings import DEBUG, MEDIA_ROOT
 
 
 @login_required
@@ -33,6 +36,9 @@ def initiate_user_profile(username):
 
 @login_required
 def profile(request):
+    fs = FileSystemStorage()
+    profile_picture_url = None
+    
     if request.method == "GET":
         username = request.GET['username']
         try:
@@ -42,16 +48,37 @@ def profile(request):
             return render(request, "custom_templates/page-500.html")
         else:
             data = model_to_dict(profile_obj)
+
             # remove not needed fields
             data.pop("id")
             data.pop("e_verified")
-            return render(request, "custom_templates/profile.html", {"data": data})
+
+            # retrieve profile picture
+            file_name = './users/' + username + '.png'
+            if fs.exists(file_name):
+                profile_picture_url = fs.url(file_name)
+            else:
+                profile_picture_url = fs.url('./users/profilePic.png')
+            return render(request, "custom_templates/profile.html", {"data": data, "profile_picture" : profile_picture_url})
+
     elif request.method == "POST":
         user_data = request.POST.dict()
-        if request.FILES['profile_picture']:
-            print(request.FILES['profile_picture'])
+        try:
+            uploaded_pic = request.FILES['profile_picture']
+        except:
+            pass
         else:
-            print("file not found")
+            file_name = './users/' + user_data['old_username'] + '.png'
+            if fs.exists(file_name):
+                print("replacing existing image")
+                fs.delete(file_name)
+            
+            # store image using PIL.Image
+            image = Image.open(uploaded_pic)
+            image = image.resize((200, 300))
+            path_to_storage = path.join(MEDIA_ROOT, "users/") + user_data['old_username'] + '.png'
+            image.save(format="png", fp=path_to_storage)
+
         try:
             profile_obj = UserProfile.objects.get(
                 username=user_data['old_username'])

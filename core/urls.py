@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.staticfiles.urls import static, staticfiles_urlpatterns
+from core import settings
 
 urlpatterns = [
     # admin sites
@@ -23,4 +25,7 @@ urlpatterns = [
     path("", include("authentication.urls")),
     # user management 
     path("", include("user_management.urls")),
-]
+    
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += staticfiles_urlpatterns()

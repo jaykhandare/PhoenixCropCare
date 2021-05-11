@@ -3,7 +3,11 @@
 {% block title %} Profile {% endblock title %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+    <script>
+        width: 400px; height: 500px; background: url(profile_picture) no-repeat; text-indend: -99999px;
+    </script>
+{% endblock stylesheets %}
 
 {% block content %}
 
@@ -67,10 +71,14 @@
                                         </div>
                                     {% endfor %}
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleFormControlFile1">Change Profile Picture</label>
-                                    <input type="file" class="form-control-file" id="exampleFormControlFile1" name = "profile_picture">
-                                </div>
+                                {% if profile_picture %}
+                                    <div class="form-group">
+                                        <label style="width: 200px; height: 300px; background: url({{profile_picture}}) no-repeat; text-indent: -99999px;">
+                                            <input type="file" id="imgInput" name="profile_picture"/>
+                                        </label>
+                                        <div> Click on image to update profile picture</div>
+                                    </div>
+                                {% endif %}
                             </div>
                             <div class="card-action">
                                 <button type="submit" class="btn btn-success">Update</button>
