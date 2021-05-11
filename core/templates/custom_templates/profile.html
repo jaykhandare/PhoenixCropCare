@@ -1,7 +1,7 @@
  {% extends "layouts/base.html" %}
 
 {% block title %} Profile {% endblock title %}
- 
+
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
@@ -29,42 +29,47 @@
                     </div>
 
                     {% if data %}
-                        <form method="post" action="">{% csrf_token %}
+                        <form method="post" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
                             <input type="hidden" name="old_username" value="{{data.username}}">
                             <div class="card-body">
                                 <div class="row">
-                                {% for key,value in data.items%}
-                                    <div class="col-md-6 col-lg-4">
-                                        <div class="form-group form-inline">
-                                            <label for="inlineinput" class="col-md-3 col-form-label">{{key.capitalize}}</label>
-                                            <div class="col-md-9 p-0">
-                                                {% if key == "authorized" %}
-                                                    <select class="form-control" id="formGroupDefaultSelect" name="{{key}}" value="{{value}}">
-                                                        <option {% if value == True %} selected {% endif%}>True</option>
-                                                        <option {% if value == False %} selected {% endif%}>False</option>
-                                                    </select>
-                                                {% elif key == "position" %}
-                                                    <select class="form-control" id="formGroupDefaultSelect" name="{{key}}" value="{{value}}">
-                                                        <option {% if value == "director" %} selected {% endif%}>director</option>
-                                                        <option {% if value == "asst-director" %} selected {% endif%}>asst-director</option>
-                                                        <option {% if value == "hr-manager" %} selected {% endif%}>hr-manager</option>
-                                                        <option {% if value == "hr-exec" %} selected {% endif%}>hr-exec</option>
-                                                        <option {% if value == "hr-admin" %} selected {% endif%}>hr-admin</option>
-                                                        <option {% if value == "busi-dev-exec" %} selected {% endif%}>busi-dev-exec</option>
-                                                        <option {% if value == "sales-head" %} selected {% endif%}>sales-head</option>
-                                                        <option {% if value == "reg-manager" %} selected {% endif%}>reg-manager</option>
-                                                        <option {% if value == "state-manager" %} selected {% endif%}>state-manager</option>
-                                                        <option {% if value == "area-manager" %} selected {% endif%}>area-manager</option>
-                                                        <option {% if value == "tert-manager" %} selected {% endif%}>tert-manager</option>
-                                                    </select>
-                                                {% else %}
-                                                    <input type="text" class="form-control" id="inlineinput" name="{{key}}" value="{{value}}">
-                                                {% endif%}
-                                                <span class="text-danger">{{ value.errors }}</span>
+                                    {% for key,value in data.items%}
+                                        <div class="col-md-6 col-lg-4">
+                                            <div class="form-group form-inline">
+                                                <label for="inlineinput" class="col-md-3 col-form-label">{{key.capitalize}}</label>
+                                                <div class="col-md-9 p-0">
+                                                    {% if key == "authorized" %}
+                                                        <select class="form-control" id="formGroupDefaultSelect" name="{{key}}" value="{{value}}">
+                                                            <option {% if value == True %} selected {% endif%}>True</option>
+                                                            <option {% if value == False %} selected {% endif%}>False</option>
+                                                        </select>
+                                                    {% elif key == "position" %}
+                                                        <select class="form-control" id="formGroupDefaultSelect" name="{{key}}" value="{{value}}">
+                                                            <option {% if value == "director" %} selected {% endif%}>director</option>
+                                                            <option {% if value == "asst-director" %} selected {% endif%}>asst-director</option>
+                                                            <option {% if value == "hr-manager" %} selected {% endif%}>hr-manager</option>
+                                                            <option {% if value == "hr-exec" %} selected {% endif%}>hr-exec</option>
+                                                            <option {% if value == "hr-admin" %} selected {% endif%}>hr-admin</option>
+                                                            <option {% if value == "busi-dev-exec" %} selected {% endif%}>busi-dev-exec</option>
+                                                            <option {% if value == "sales-head" %} selected {% endif%}>sales-head</option>
+                                                            <option {% if value == "reg-manager" %} selected {% endif%}>reg-manager</option>
+                                                            <option {% if value == "state-manager" %} selected {% endif%}>state-manager</option>
+                                                            <option {% if value == "area-manager" %} selected {% endif%}>area-manager</option>
+                                                            <option {% if value == "tert-manager" %} selected {% endif%}>tert-manager</option>
+                                                        </select>
+                                                    {% else %}
+                                                        <input type="text" class="form-control" id="inlineinput" name="{{key}}" value="{{value}}">
+                                                    {% endif%}
+                                                    <span class="text-danger">{{ value.errors }}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                {% endfor %}
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlFile1">Change Profile Picture</label>
+                                    <input type="file" class="form-control-file" id="exampleFormControlFile1" name = "profile_picture">
                                 </div>
                             </div>
                             <div class="card-action">

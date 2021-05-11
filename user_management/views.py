@@ -1,12 +1,13 @@
-from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from user_management.models import UserProfile
 from django.forms.models import model_to_dict
+from django.contrib.auth.decorators import login_required
 
+from user_management.models import UserProfile
 from core.settings import DEBUG
 
 
+@login_required
 def all_users(request):
     if request.method == "GET":
         # fill this data with data of all users and then modify the tables-simple.html
@@ -30,6 +31,7 @@ def initiate_user_profile(username):
         return True
 
 
+@login_required
 def profile(request):
     if request.method == "GET":
         username = request.GET['username']
@@ -46,6 +48,10 @@ def profile(request):
             return render(request, "custom_templates/profile.html", {"data": data})
     elif request.method == "POST":
         user_data = request.POST.dict()
+        if request.FILES['profile_picture']:
+            print(request.FILES['profile_picture'])
+        else:
+            print("file not found")
         try:
             profile_obj = UserProfile.objects.get(
                 username=user_data['old_username'])
