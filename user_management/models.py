@@ -26,7 +26,7 @@ class Dealer_Profile(models.Model):
     auth_number     = models.CharField(max_length=20)
     first_name      = models.CharField(max_length=20)
     last_name       = models.CharField(max_length=20)
-    firm_name       = models.CharField(max_length=35)
+    firm_name       = models.CharField(max_length=35, unique=True)
     pd_open_date    = models.DateField(auto_now_add=True)
 
     address     = models.CharField(max_length=30)

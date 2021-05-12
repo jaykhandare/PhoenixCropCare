@@ -9,7 +9,7 @@
 
     <div class="page-inner">
         <div class="page-header">
-            <h4 class="page-title">Register Dealer</h4>
+            <h4 class="page-title">{% if type == "register" %}Register {% else %} Edit {% endif %} Dealer</h4>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -20,8 +20,8 @@
                             {% if msg %}
                                 <span class="text-danger">{{ msg | safe }}</span>
                             {% else %}
-                                <span>
-                                    Enter dealer details
+                                <span> 
+                                    {% if type == "register" %} Register {% else %} Edit {% endif %} dealer details 
                                 </span>
                             {% endif %}
 
@@ -31,10 +31,10 @@
                         {% load label_formatter %}
                         <form method="post" action="">
                             {% csrf_token %}
+
                             <div class="card-body">
                                 <div class="row">
                                     {% for key, value in data %}
-                                    
                                         <div class="col-md-6 col-lg-4">
                                             <div class="form-group form-inline">
                                                 <div class="col-md-9 p-0">
@@ -44,8 +44,14 @@
                                                             <option {% if value == True %} selected {% endif%}>True</option>
                                                             <option {% if value == False %} selected {% endif%}>False</option>
                                                         </select>
+                                                    {% elif key == "pd_open_date" or key == "SD_receipt_date" %}
+                                                        <label for="inlineinput" class="col-md-11 col-form-label">{{key|format_label}}</label>
+                                                        <input type="date" class="form-control" id="inlineinput" name="{{key}}" value="{{value}}">
                                                     {% else %}
                                                         <label for="inlineinput" class="col-md-11 col-form-label">{{key|format_label}}</label>
+                                                        {% if type == "edit" and key == "firm_name" %}
+                                                            <input type="hidden" name="old_firm_name" value="{{value}}">
+                                                        {% endif %}
                                                         <input {% if key == "firm_name" %}required{% endif%} type="text" class="form-control" id="inlineinput" name="{{key}}" value="{{value}}">
                                                     {% endif%}
                                                 </div>
@@ -55,7 +61,9 @@
                                 </div>
                             </div>
                             <div class="card-action">
-                                <button type="submit" class="btn btn-success">Update</button>
+                                <button type="submit" class="btn btn-success">
+                                    {% if type == "register" %} Create {% else %} Update {% endif %}
+                                </button>
                             </div>
                         </form>
                     {% endif %}
