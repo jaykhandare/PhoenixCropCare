@@ -6,7 +6,7 @@ from django.core.files.storage import FileSystemStorage
 from PIL import Image
 from os import path
 
-from user_management.models import DealerProfile, UserProfile
+from user_management.models import Dealer_Profile, User_Profile
 from core.settings import DEBUG, MEDIA_ROOT
 
 
@@ -26,7 +26,7 @@ def all_users(request):
 def all_dealers(request):
     if request.method == "GET":
         # fill this data with data of all dealers and then modify the tables-simple.html
-        all_dealers_data = DealerProfile.objects.all()
+        all_dealers_data = Dealer_Profile.objects.all()
         headers = ["Code", "First Name", "Last Name", "Firm Name",
                    "Contact", "Managed By", "Actions for account"]
         return render(request, "custom_templates/tables-simple.html", {"data": all_dealers_data, "headers": headers, "type": "dealers"})
@@ -35,7 +35,7 @@ def all_dealers(request):
 
 
 def initiate_user_profile(username):
-    profile_obj = UserProfile(username=username)
+    profile_obj = User_Profile(username=username)
     try:
         profile_obj.save()
     except Exception as e:
@@ -54,7 +54,7 @@ def profile(request):
     if request.method == "GET":
         username = request.GET['username']
         try:
-            profile_obj = UserProfile.objects.get(username=username)
+            profile_obj = User_Profile.objects.get(username=username)
         except Exception as e:
             print(e)
             return render(request, "custom_templates/page-500.html")
@@ -93,7 +93,7 @@ def profile(request):
             image.save(format="png", fp=path_to_storage)
 
         try:
-            profile_obj = UserProfile.objects.get(
+            profile_obj = User_Profile.objects.get(
                 username=user_data['old_username'])
         except Exception as e:
             print(e)
@@ -134,7 +134,7 @@ def register_dealer(request):
         return render(request, "dealers/register_dealer.html", {"data": orlist})
     elif request.method == "POST":
         dealer_data = request.POST.dict()
-        dealer_obj = DealerProfile(
+        dealer_obj = Dealer_Profile(
             code=dealer_data['code'],
             auth_number=dealer_data['auth_number'],
             first_name=dealer_data['first_name'],

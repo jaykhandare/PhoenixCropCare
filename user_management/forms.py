@@ -1,5 +1,5 @@
 from django import forms
-from user_management.models import DealerProfile
+from user_management.models import Dealer_Profile
 
 class DealerForm(forms.ModelForm):
     code            = forms.CharField()
@@ -36,5 +36,5 @@ class DealerForm(forms.ModelForm):
     authorized      = forms.BooleanField()
 
     class Meta:
-        model = DealerProfile
+        model = Dealer_Profile
         fields = "__all__"

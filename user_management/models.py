@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class UserProfile(models.Model):
+class User_Profile(models.Model):
     username    = models.CharField(max_length=20, unique=True)
 
     address     = models.CharField(max_length=30)
@@ -21,7 +21,7 @@ class UserProfile(models.Model):
     date_of_joining = models.DateField(auto_now_add=True)
 
 
-class DealerProfile(models.Model):
+class Dealer_Profile(models.Model):
     code            = models.CharField(max_length=20)
     auth_number     = models.CharField(max_length=20)
     first_name      = models.CharField(max_length=20)
