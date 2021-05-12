@@ -12,7 +12,10 @@ def register_user(request):
     msg = None
     success = False
 
-    if request.method == "POST":
+    if request.method == "GET":
+        form = SignUpForm()
+
+    elif request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
             try:
@@ -30,6 +33,8 @@ def register_user(request):
             except Exception as e:
                 msg = 'User cannot be created. Exception : {}'.format(str(e))
                 print(e)
+                return render(request, "custom_templates/page-500.html")
+
             else:
                 username = ""
                 if DEBUG:
@@ -45,12 +50,12 @@ def register_user(request):
                     usr_obj.save()
                 except Exception as e:
                     print(e)
-                    return render(request, "custom_templates/page-404.html")
+                    return render(request, "custom_templates/page-500.html")
 
                 # add an empty entry in profile table
                 is_initiated = initiate_user_profile(username=username)
                 if not is_initiated:
-                    return render(request, "custom_templates/page-404.html")
+                    return render(request, "custom_templates/page-500.html")
 
                 if DEBUG:
                     user = authenticate(
@@ -64,17 +69,18 @@ def register_user(request):
 
         else:
             msg = 'Form is not valid'
-    else:
-        form = SignUpForm()
 
     return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
 
 
 def login_view(request):
-    form = LoginForm(request.POST or None)
     msg = None
 
-    if request.method == "POST":
+    if request.method == "GET":
+        form = LoginForm()
+
+    elif request.method == "POST":
+        form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
@@ -96,5 +102,5 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    msg = "Jayendra"
+    msg = None
     return render(request, "accounts/logout.html", {"msg": msg})

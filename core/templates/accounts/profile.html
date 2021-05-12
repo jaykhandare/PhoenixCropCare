@@ -24,24 +24,25 @@
                             {% if msg %}
                                 <span class="text-danger">{{ msg | safe }}</span>
                             {% else %}
-                            <span>
-                                Modify profile
-                            </span>
+                                <span>
+                                    Modify profile
+                                </span>
                             {% endif %}
 
                         </div>
                     </div>
 
                     {% if data %}
+                        {% load label_formatter %}
                         <form method="post" action="" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="old_username" value="{{data.username}}">
                             <div class="card-body">
                                 <div class="row">
-                                    {% for key,value in data.items%}
+                                    {% for key,value in data.items %}
                                         <div class="col-md-6 col-lg-4">
                                             <div class="form-group form-inline">
-                                                <label for="inlineinput" class="col-md-3 col-form-label">{{key.capitalize}}</label>
+                                                <label for="inlineinput" class="col-md-3 col-form-label">{{key|format_label}}</label>
                                                 <div class="col-md-9 p-0">
                                                     {% if key == "authorized" %}
                                                         <select class="form-control" id="formGroupDefaultSelect" name="{{key}}" value="{{value}}">

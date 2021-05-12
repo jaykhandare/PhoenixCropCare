@@ -20,22 +20,19 @@
                             {% if msg %}
                                 <span class="text-danger">{{ msg | safe }}</span>
                             {% else %}
-                            <span>
-                                Complete your credentials 
-                            </span>
+                                <span>
+                                    Complete your credentials 
+                                </span>
                             {% endif %}
 
                         </div>
                     </div>
 
                     <form method="post" action="">
-
                         {% csrf_token %}
-
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 col-lg-4">
-
                                     <div class="form-group">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
@@ -104,9 +101,7 @@
                             &nbsp; &nbsp;
                             <span>Already have and account?</span> <a href="{% url 'login' %}" >Login</a>
                         </div>
-
                     </form>
-
                 </div>
             </div>
         </div>
