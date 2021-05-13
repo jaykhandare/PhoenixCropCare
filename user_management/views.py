@@ -6,7 +6,8 @@ from django.core.files.storage import FileSystemStorage
 from PIL import Image
 from os import path
 
-from user_management.models import Dealer_Profile, User_Profile
+from user_management.forms import DealerDeleteForm
+from user_management.models import Dealer_Profile, User_Profile, DeletedDealers
 from core.settings import DEBUG, MEDIA_ROOT
 
 
@@ -177,8 +178,8 @@ def get_dealer_ordered_list(firm_name=None, managed_by=None):
 @login_required
 def register_dealer(request):
     if request.method == "GET":
-        orlist = get_dealer_ordered_list(managed_by=request.user)
-        return render(request, "dealers/dealer_form.html", {"data": orlist, "type": "register"})
+        dealer_ordered_list = get_dealer_ordered_list(managed_by=request.user)
+        return render(request, "dealers/basic_form.html", {"data": dealer_ordered_list, "type": "register"})
     elif request.method == "POST":
         dealer_data = request.POST.dict()
         return save_data_and_respond(request=request, data=dealer_data, processing_type="ADD")
@@ -192,7 +193,7 @@ def edit_dealer(request):
         if data is None:
             return render(request, "custom_templates/page-404.html")
 
-        return render(request, "dealers/dealer_form.html", {"data": data, "type": "edit"})
+        return render(request, "dealers/basic_form.html", {"data": data, "type": "edit"})
     elif request.method == "POST":
         dealer_data = request.POST.dict()
         return save_data_and_respond(request=request, data=dealer_data, processing_type="EDIT")
@@ -210,7 +211,7 @@ def save_data_and_respond(request=None, data=None, processing_type=None):
         in objects.get, this is not found, so goes to except
         there tries to create a new object with new firm_name which is already there in db
         firm_name is unique so fails there and thows UNIQUE constraint failed error to user
-        
+
     # this needs to be taken care of later
     """
     msg = "Dealer details updated"
@@ -266,17 +267,53 @@ def save_data_and_respond(request=None, data=None, processing_type=None):
         print("Exception: ", e)
         return render(request, "custom_templates/page-500.html")
     else:
-        return render(request, "dealers/dealer_form.html", {"msg": msg})
+        return render(request, "dealers/basic_form.html", {"msg": msg})
 
 
 @login_required
 def remove_dealer(request):
     if request.method == "GET":
-        return render(request, "custom_templates/tables-simple.html")
+        form = DealerDeleteForm()
+        return render(request, "dealers/delete_form.html", {"form" : form})
     elif request.method == "POST":
+        dealer = request.POST.dict()
+        
+        try:
+            retrieved_dealer = Dealer_Profile.objects.get(code=dealer['code'], managed_by=dealer['managed_by'])
+        except Exception as e:
+            # this means dealer is not there in the db, 
+            # still that's okay, reply with a basic error saying dealer not registered
+            # send a correct message later on
+            return render(request, "custom_templates/page-404.html")
+        save_deleted_dealer(retrieved_dealer)
+        try:
+            retrieved_dealer.delete()
+        except Exception as e:
+            print(e)
+            return render(request, "custom_templates/page-500.html")
+        
+        # reply with a success message
         return render(request, "custom_templates/page-404.html")
 
 
 def testFunction(request):
     print("TEST")
     return render(request, "custom_templates/page-500.html")
+
+
+def save_deleted_dealer(dealer=None):
+    if dealer is not None:
+        try:
+            DeletedDealers.objects.create(
+                first_name  = dealer.first_name,
+                last_name   = dealer.last_name,
+                firm_name   = dealer.firm_name,
+                managed_by  = dealer.managed_by,
+                address     = dealer.address,
+                city        = dealer.city,
+                pin_code    = dealer.pin_code,
+                contact     = dealer.contact,
+                email       = dealer.email
+            )
+        except Exception as e:
+            print(e)

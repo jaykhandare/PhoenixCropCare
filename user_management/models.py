@@ -54,3 +54,16 @@ class Dealer_Profile(models.Model):
     agreement_done  = models.BooleanField(default=False)
     gift_sent       = models.BooleanField(default=False)
     authorized      = models.BooleanField(default=False)
+
+
+# this is to keep track of dealers that were lost
+class DeletedDealers(models.Model):
+    first_name  = models.CharField(max_length=20)
+    last_name   = models.CharField(max_length=20)
+    firm_name   = models.CharField(max_length=35, unique=True)
+    managed_by  = models.CharField(max_length=20, blank=False)
+    address     = models.CharField(max_length=30)
+    city        = models.CharField(max_length=15)
+    pin_code    = models.CharField(max_length=6)
+    contact     = models.CharField(max_length=30)
+    email       = models.EmailField()
