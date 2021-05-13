@@ -5,7 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from PIL import Image
 from os import path
-from datetime import date
 
 from user_management.models import Dealer_Profile, User_Profile
 from core.settings import DEBUG, MEDIA_ROOT
@@ -76,6 +75,8 @@ def profile(request):
 
     elif request.method == "POST":
         user_data = request.POST.dict()
+
+        # processing profile picture
         try:
             uploaded_pic = request.FILES['profile_picture']
         except:
@@ -86,13 +87,14 @@ def profile(request):
                 print("replacing existing image")
                 fs.delete(file_name)
 
-            # store image using PIL.Image
+            # store image using Pillow lib
             image = Image.open(uploaded_pic)
             image = image.resize((200, 300))
             path_to_storage = path.join(
                 MEDIA_ROOT, "users/") + user_data['old_username'] + '.png'
             image.save(format="png", fp=path_to_storage)
 
+        # processing data
         try:
             profile_obj = User_Profile.objects.get(
                 username=user_data['old_username'])
@@ -123,9 +125,13 @@ def profile(request):
 
 def get_dealer_ordered_list(firm_name=None, managed_by=None):
     ordered_list = [
-        ['code', ""], ['auth_number', ""], ['first_name', ""], ['last_name', ""], ['firm_name', ""], ['pd_open_date', ""], ['address', ""], ['city', ""], [
-            'taluka', ""], ['district', ""], ['state', ""], ['pin_code', ""], ['contact', ""], ['email', ""], ['pan_number', ""], ['GST_number', ""],
-        ['seed_license', ""], ['pesticide_license', ""], ['fertilizer_license', ""], ['SD_receipt_code', ""], ['SD_expected', ""], ['SD_deposited', ""], ['SD_receipt_date', ""], ['SD_payment_type', ""], ['exp_first_order', ""], ['managed_by', managed_by], ['agreement_done', ""], ['gift_sent', ""], ['authorized', ""]]
+        ['code', ""], ['auth_number', ""], ['first_name', ""], ['last_name', ""], [
+            'firm_name', ""], ['pd_open_date', ""], ['address', ""], ['city', ""],
+        ['taluka', ""], ['district', ""], ['state', ""], ['pin_code', ""], [
+            'contact', ""], ['email', ""], ['pan_number', ""], ['GST_number', ""],
+        ['seed_license', ""], ['pesticide_license', ""], ['fertilizer_license', ""], [
+            'SD_receipt_code', ""], ['SD_expected', ""], ['SD_deposited', ""],
+        ['SD_receipt_date', ""], ['SD_payment_type', ""], ['exp_first_order', ""], ['managed_by', managed_by], ['agreement_done', ""], ['gift_sent', ""], ['authorized', ""]]
 
     if firm_name is None:
         return ordered_list
@@ -175,7 +181,7 @@ def register_dealer(request):
         return render(request, "dealers/dealer_form.html", {"data": orlist, "type": "register"})
     elif request.method == "POST":
         dealer_data = request.POST.dict()
-        return save_data_and_respond(request=request, data=dealer_data)
+        return save_data_and_respond(request=request, data=dealer_data, processing_type="ADD")
 
 
 @login_required
@@ -189,18 +195,10 @@ def edit_dealer(request):
         return render(request, "dealers/dealer_form.html", {"data": data, "type": "edit"})
     elif request.method == "POST":
         dealer_data = request.POST.dict()
-        return save_data_and_respond(request=request, data=dealer_data)
+        return save_data_and_respond(request=request, data=dealer_data, processing_type="EDIT")
 
 
-@login_required
-def remove_dealer(request):
-    if request.method == "GET":
-        return render(request, "custom_templates/tables-simple.html")
-    else:
-        return render(request, "custom_templates/page-404.html")
-
-
-def save_data_and_respond(request=None, data=None):
+def save_data_and_respond(request=None, data=None, processing_type=None):
     if data is None or request is None:
         print("incorrect method call in the code.")
         print("Something wrong, I can feel it.")
@@ -215,6 +213,7 @@ def save_data_and_respond(request=None, data=None):
         
     # this needs to be taken care of later
     """
+    msg = "Dealer details updated"
     try:
         dealer_obj = Dealer_Profile.objects.get(
             firm_name=data['old_firm_name'])
@@ -225,6 +224,13 @@ def save_data_and_respond(request=None, data=None):
         except Exception as e:
             dealer_obj = Dealer_Profile.objects.get(
                 firm_name=data['firm_name'])
+        else:
+            msg = "Dealer details added"
+
+    if data['pd_open_date']:
+        dealer_obj.pd_open_date = data['pd_open_date']
+    if data['SD_receipt_date']:
+        dealer_obj.SD_receipt_date = data['SD_receipt_date']
 
     dealer_obj.firm_name = data['firm_name']
     dealer_obj.code = data['code']
@@ -253,10 +259,6 @@ def save_data_and_respond(request=None, data=None):
     dealer_obj.agreement_done = data['agreement_done']
     dealer_obj.gift_sent = data['gift_sent']
     dealer_obj.authorized = data['authorized']
-    if data['pd_open_date']:
-        dealer_obj.pd_open_date = data['pd_open_date']
-    if data['SD_receipt_date']:
-        dealer_obj.SD_receipt_date = data['SD_receipt_date']
 
     try:
         dealer_obj.save()
@@ -264,4 +266,17 @@ def save_data_and_respond(request=None, data=None):
         print("Exception: ", e)
         return render(request, "custom_templates/page-500.html")
     else:
-        return render(request, "dealers/dealer_form.html", {"msg": "Dealer details update"})
+        return render(request, "dealers/dealer_form.html", {"msg": msg})
+
+
+@login_required
+def remove_dealer(request):
+    if request.method == "GET":
+        return render(request, "custom_templates/tables-simple.html")
+    elif request.method == "POST":
+        return render(request, "custom_templates/page-404.html")
+
+
+def testFunction(request):
+    print("TEST")
+    return render(request, "custom_templates/page-500.html")
