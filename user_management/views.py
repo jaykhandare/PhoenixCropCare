@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
@@ -8,7 +9,7 @@ from os import path
 
 from user_management.forms import DealerDeleteForm
 from user_management.models import Dealer_Profile, User_Profile, DeletedDealers
-from core.settings import DEBUG, MEDIA_ROOT
+from core.settings import MEDIA_ROOT
 
 
 @login_required
@@ -126,13 +127,21 @@ def profile(request):
 
 def get_dealer_ordered_list(firm_name=None, managed_by=None):
     ordered_list = [
-        ['code', ""], ['auth_number', ""], ['first_name', ""], ['last_name', ""], [
-            'firm_name', ""], ['pd_open_date', ""], ['address', ""], ['city', ""],
-        ['taluka', ""], ['district', ""], ['state', ""], ['pin_code', ""], [
-            'contact', ""], ['email', ""], ['pan_number', ""], ['GST_number', ""],
-        ['seed_license', ""], ['pesticide_license', ""], ['fertilizer_license', ""], [
-            'SD_receipt_code', ""], ['SD_expected', ""], ['SD_deposited', ""],
-        ['SD_receipt_date', ""], ['SD_payment_type', ""], ['exp_first_order', ""], ['managed_by', managed_by], ['agreement_done', ""], ['gift_sent', ""], ['authorized', ""]]
+        ['code', ""], ['auth_number', ""],
+        ['first_name', ""], ['last_name', ""],
+        ['firm_name', ""], ['pd_open_date', ""],
+        ['address', ""], ['city', ""],
+        ['taluka', ""], ['district', ""],
+        ['state', ""], ['pin_code', ""],
+        ['contact', ""], ['email', ""],
+        ['pan_number', ""], ['GST_number', ""],
+        ['seed_license', ""], ['pesticide_license', ""],
+        ['fertilizer_license', ""], ['SD_receipt_code', ""],
+        ['SD_expected', ""], ['SD_deposited', ""],
+        ['SD_receipt_date', ""], ['SD_payment_type', ""],
+        ['exp_first_order', ""], ['managed_by', managed_by],
+        ['agreement_done', ""], ['gift_sent', ""],
+        ['authorized', ""]]
 
     if firm_name is None:
         return ordered_list
@@ -192,8 +201,8 @@ def edit_dealer(request):
         data = get_dealer_ordered_list(firm_name=firm_name)
         if data is None:
             return render(request, "custom_templates/page-404.html")
-
         return render(request, "dealers/basic_form.html", {"data": data, "type": "edit"})
+
     elif request.method == "POST":
         dealer_data = request.POST.dict()
         return save_data_and_respond(request=request, data=dealer_data, processing_type="EDIT")
@@ -267,31 +276,49 @@ def save_data_and_respond(request=None, data=None, processing_type=None):
         print("Exception: ", e)
         return render(request, "custom_templates/page-500.html")
     else:
+        if data['authorized'] in ["True", "1", 1, True]:
+            # create an user profile for dealer if he's authorized
+            if not create_dealer_user_profile(data):
+                return render(request, "custom_templates/page-500.html")
+
         return render(request, "dealers/basic_form.html", {"msg": msg})
+
+
+def create_dealer_user_profile(data):
+    username = data['first_name'].lower(
+    )[0] + data['last_name'].lower() + "404"
+    try:
+        User.objects.create(username=username,
+                            password=make_password(username))
+    except Exception as e:
+        print(e)
+        return False
+    return True
 
 
 @login_required
 def remove_dealer(request):
     if request.method == "GET":
         form = DealerDeleteForm()
-        return render(request, "dealers/delete_form.html", {"form" : form})
+        return render(request, "dealers/delete_form.html", {"form": form})
     elif request.method == "POST":
         dealer = request.POST.dict()
-        
+
         try:
-            retrieved_dealer = Dealer_Profile.objects.get(code=dealer['code'], managed_by=dealer['managed_by'])
+            retrieved_dealer = Dealer_Profile.objects.get(
+                code=dealer['code'], managed_by=dealer['managed_by'])
         except Exception as e:
-            # this means dealer is not there in the db, 
+            # this means dealer is not there in the db,
             # still that's okay, reply with a basic error saying dealer not registered
             # send a correct message later on
             return render(request, "custom_templates/page-404.html")
-        save_deleted_dealer(retrieved_dealer)
         try:
+            save_deleted_dealer(retrieved_dealer)
             retrieved_dealer.delete()
         except Exception as e:
             print(e)
             return render(request, "custom_templates/page-500.html")
-        
+
         # reply with a success message
         return render(request, "custom_templates/page-404.html")
 
@@ -305,15 +332,15 @@ def save_deleted_dealer(dealer=None):
     if dealer is not None:
         try:
             DeletedDealers.objects.create(
-                first_name  = dealer.first_name,
-                last_name   = dealer.last_name,
-                firm_name   = dealer.firm_name,
-                managed_by  = dealer.managed_by,
-                address     = dealer.address,
-                city        = dealer.city,
-                pin_code    = dealer.pin_code,
-                contact     = dealer.contact,
-                email       = dealer.email
+                first_name=dealer.first_name,
+                last_name=dealer.last_name,
+                firm_name=dealer.firm_name,
+                managed_by=dealer.managed_by,
+                address=dealer.address,
+                city=dealer.city,
+                pin_code=dealer.pin_code,
+                contact=dealer.contact,
+                email=dealer.email
             )
         except Exception as e:
             print(e)
