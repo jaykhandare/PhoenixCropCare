@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login, logout
 from authentication.forms import LoginForm, SignUpForm
 from django.contrib.auth.models import User
 from random import randint
-
 from core.settings import DEBUG
+
 from user_management.views import initiate_user_profile
 
 
@@ -14,7 +14,6 @@ def register_user(request):
 
     if request.method == "GET":
         form = SignUpForm()
-
     elif request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -26,7 +25,6 @@ def register_user(request):
 
             first_name = form.cleaned_data.get("first_name")
             last_name = form.cleaned_data.get("last_name")
-
             try:
                 usr_obj = User.objects.get(
                     first_name=first_name, last_name=last_name, username="")
@@ -34,7 +32,6 @@ def register_user(request):
                 msg = 'User cannot be created. Exception : {}'.format(str(e))
                 print(e)
                 return render(request, "custom_templates/page-500.html")
-
             else:
                 username = ""
                 if DEBUG:
@@ -66,7 +63,6 @@ def register_user(request):
                 msg = 'User created {}- please provide documentation for verification'.format(
                     usr_obj.username)
                 success = True
-
         else:
             msg = 'Form is not valid'
 
@@ -78,7 +74,6 @@ def login_view(request):
 
     if request.method == "GET":
         form = LoginForm()
-
     elif request.method == "POST":
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -102,5 +97,4 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    msg = None
-    return render(request, "accounts/logout.html", {"msg": msg})
+    return render(request, "accounts/logout.html")

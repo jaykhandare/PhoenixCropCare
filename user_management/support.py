@@ -2,11 +2,10 @@
     These functions support view functions and are kept here to keep views.py clean.
 """
 
-from user_management.models import User_Profile, Dealer_Profile
+from user_management.models import User_Profile, Dealer_Profile, DeletedDealers
 from django.shortcuts import render
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-
 
 
 # used to differentiate among employees and authorized dealers
@@ -178,3 +177,24 @@ def create_dealer_user_profile(data):
         print(e)
         return False
     return True
+
+
+# used to save dealer info for future, if it is deleted
+def save_deleted_dealer(dealer=None):
+    if dealer is not None:
+        try:
+            DeletedDealers.objects.create(
+                first_name=dealer.first_name,
+                last_name=dealer.last_name,
+                firm_name=dealer.firm_name,
+                managed_by=dealer.managed_by,
+                address=dealer.address,
+                city=dealer.city,
+                pin_code=dealer.pin_code,
+                contact=dealer.contact,
+                email=dealer.email
+            )
+        except Exception as e:
+            print(e)
+    else:
+        print("function incorrectly called. Investigate.")
