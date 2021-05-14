@@ -1,0 +1,14 @@
+remove user functionality not implemented in all_users
+dashboard for users or dealers not created
+    users
+        -
+        -
+        -
+        -
+        -
+    dealers
+        -
+        -
+        -
+        -
+        -

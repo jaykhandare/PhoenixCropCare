@@ -169,8 +169,7 @@ def save_data_and_respond(request=None, data=None, processing_type=None):
 
 # used to create a basic user profile when the dealer is authorized
 def create_dealer_user_profile(data):
-    username = data['first_name'].lower(
-    )[0] + data['last_name'].lower() + "404"
+    username = data['first_name'].lower()[0] + data['last_name'].lower() + "404"
     try:
         User.objects.create(username=username,
                             password=make_password(username))
