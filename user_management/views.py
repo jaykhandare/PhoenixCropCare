@@ -7,7 +7,7 @@ from core.settings import MEDIA_ROOT
 from PIL import Image
 from os import path
 
-from user_management.forms import DealerDeleteForm
+from user_management.forms import DealerDeleteForm, UserDeleteForm
 from user_management.models import Dealer_Profile, User_Profile
 from user_management.support import *
 
@@ -24,6 +24,31 @@ def all_users(request):
         return render(request, "custom_templates/tables-simple.html", {"data": all_users_data, "headers": headers, "type": "users"})
     else:
         return render(request, "custom_templates/page-404.html")
+
+
+@login_required
+def remove_user(request):
+    if not is_staff(request):
+        return render(request, "custom_templates/unauthorized_access.html")
+
+    if request.method == "GET":
+        return render(request, "accounts/delete_form.html", {'form' : UserDeleteForm})
+    elif request.method == "POST":
+        user_creds = request.POST.dict()
+        try:
+            user_obj = User.objects.get(username=user_creds['username'], email=user_creds['email'])
+            user_obj.delete()
+            user_profile = User_Profile.objects.get(username=user_creds['username'])
+            user_profile.delete()
+        except Exception as e:
+            print(e)
+            return render(request, "custom_templates/page-500.html")
+        else:
+            fs = FileSystemStorage()
+            file_name = './users/' + user_creds['username'] + '.png'
+            if fs.exists(file_name):
+                fs.delete(file_name)
+            return redirect('all_users')
 
 
 @login_required
@@ -163,8 +188,9 @@ def remove_dealer(request):
                 code=dealer['code'], managed_by=dealer['managed_by'])
         except Exception as e:
             return render(request, "custom_templates/page-404.html")
+
+        save_deleted_dealer(retrieved_dealer)
         try:
-            save_deleted_dealer(retrieved_dealer)
             retrieved_dealer.delete()
         except Exception as e:
             print(e)

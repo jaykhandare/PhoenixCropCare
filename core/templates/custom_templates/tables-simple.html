@@ -53,10 +53,14 @@
 															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit">
 																<a href="{% url 'profile'%}?username={{user.username}}"> <i class="fa fa-edit"></i> </a>
 															</button>
+															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove">
+																<a href="{% url 'remove_user'%}"> <i class="fa fa-times"></i> </a>
+															</button>
+														{% else %}
+															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Go to dealers page">
+																<a href="{% url 'all_dealers'%}"> Dealer Account </a>
+															</button>
 														{% endif %}
-														<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove">
-															<i class="fa fa-times"></i>
-														</button>
 													</div>
 												</td>
 											</tr>
