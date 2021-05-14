@@ -28,31 +28,31 @@
                         </div>
                     </div>
                     {% if data %}
-                        {% load label_formatter %}
+                        {% load formatter %}
                         <form method="post" action="">
                             {% csrf_token %}
 
                             <div class="card-body">
                                 <div class="row">
-                                    {% for key, value in data %}
+                                    {% for name, value in data %}
                                         <div class="col-md-6 col-lg-4">
                                             <div class="form-group form-inline">
                                                 <div class="col-md-9 p-0">
-                                                    {% if key == "authorized" or key == "agreement_done" or key == "gift_sent" %}
-                                                        <label for="formGroupDefaultSelect" class="col-md-5 col-form-label">{{key|format_label}}</label>
-                                                        <select class="form-control" id="formGroupDefaultSelect" name="{{key}}" value="{{value}}">
+                                                    {% if name == "authorized" or name == "agreement_done" or name == "gift_sent" %}
+                                                        <label for="formGroupDefaultSelect" class="col-md-5 col-form-label">{{name|format_label}}</label>
+                                                        <select class="form-control" id="formGroupDefaultSelect" name="{{name}}" value="{{value}}">
                                                             <option {% if value == True %} selected {% endif%}>True</option>
                                                             <option {% if value == False %} selected {% endif%}>False</option>
                                                         </select>
-                                                    {% elif key == "pd_open_date" or key == "SD_receipt_date" %}
-                                                        <label for="inlineinput" class="col-md-11 col-form-label">{{key|format_label}}</label>
-                                                        <input type="date" class="form-control" id="inlineinput" name="{{key}}" value="{{value}}">
+                                                    {% elif name == "pd_open_date" or name == "SD_receipt_date" %}
+                                                        <label for="inlineinput" class="col-md-11 col-form-label">{{name|format_label}}</label>
+                                                        <input type="date" class="form-control" id="{{name}}" name="{{name}}" value="{{value|date:'Y-m-d'}}">
                                                     {% else %}
-                                                        <label for="inlineinput" class="col-md-11 col-form-label">{{key|format_label}}</label>
-                                                        {% if type == "edit" and key == "firm_name" %}
+                                                        <label for="inlineinput" class="col-md-11 col-form-label">{{name|format_label}}</label>
+                                                        {% if type == "edit" and name == "firm_name" %}
                                                             <input type="hidden" name="old_firm_name" value="{{value}}">
                                                         {% endif %}
-                                                        <input {% if key == "firm_name" %}required{% endif%} type="text" class="form-control" id="inlineinput" name="{{key}}" value="{{value}}">
+                                                        <input {% if name == "firm_name" %}required{% endif%} type="text" class="form-control" id="inlineinput" name="{{name}}" value="{{value}}">
                                                     {% endif%}
                                                 </div>
                                             </div>

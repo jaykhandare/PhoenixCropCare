@@ -57,10 +57,13 @@ def profile(request):
             return render(request, "custom_templates/page-500.html")
         else:
             data = model_to_dict(profile_obj)
-
             # remove not needed fields
             data.pop("id")
             data.pop("e_verified")
+            # date fields are not handled correctly by model to dict
+            data['date_of_birth'] = profile_obj.date_of_birth
+            data['date_of_joining'] = profile_obj.date_of_joining
+
 
             file_name = './users/' + username + '.png'
             if fs.exists(file_name):

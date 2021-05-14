@@ -3,11 +3,7 @@
 {% block title %} Profile {% endblock title %}
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}
-    <script>
-        width: 400px; height: 500px; background: url(profile_picture) no-repeat; text-indend: -99999px;
-    </script>
-{% endblock stylesheets %}
+{% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
@@ -33,7 +29,7 @@
                     </div>
 
                     {% if data %}
-                        {% load label_formatter %}
+                        {% load formatter %}
                         <form method="post" action="" enctype="multipart/form-data">
                             {% csrf_token %}
                             <input type="hidden" name="old_username" value="{{data.username}}">
@@ -63,6 +59,8 @@
                                                             <option {% if value == "area-manager" %} selected {% endif%}>area-manager</option>
                                                             <option {% if value == "tert-manager" %} selected {% endif%}>tert-manager</option>
                                                         </select>
+                                                    {% elif key == "date_of_birth" or key == "date_of_joining" %}
+                                                        <input type="date" class="form-control" id="inlineinput" name="{{key}}" value="{{value|date:'Y-m-d'}}">
                                                     {% else %}
                                                         <input type="text" class="form-control" id="inlineinput" name="{{key}}" value="{{value}}">
                                                     {% endif%}

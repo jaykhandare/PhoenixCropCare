@@ -57,7 +57,7 @@ class Dealer_Profile(models.Model):
 
 
 # this is to keep track of dealers that were lost
-class DeletedDealers(models.Model):
+class Deleted_Dealers(models.Model):
     first_name  = models.CharField(max_length=20)
     last_name   = models.CharField(max_length=20)
     firm_name   = models.CharField(max_length=35, unique=True)

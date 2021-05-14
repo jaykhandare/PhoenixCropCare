@@ -2,7 +2,7 @@
     These functions support view functions and are kept here to keep views.py clean.
 """
 
-from user_management.models import User_Profile, Dealer_Profile, DeletedDealers
+from user_management.models import User_Profile, Dealer_Profile, Deleted_Dealers
 from django.shortcuts import render
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
@@ -85,6 +85,7 @@ def get_dealer_ordered_list(firm_name=None, managed_by=None):
         ordered_list[26][1] = dealer_obj.agreement_done
         ordered_list[27][1] = dealer_obj.gift_sent
         ordered_list[28][1] = dealer_obj.authorized
+        
         return ordered_list
 
 
@@ -183,7 +184,7 @@ def create_dealer_user_profile(data):
 def save_deleted_dealer(dealer=None):
     if dealer is not None:
         try:
-            DeletedDealers.objects.create(
+            Deleted_Dealers.objects.create(
                 first_name=dealer.first_name,
                 last_name=dealer.last_name,
                 firm_name=dealer.firm_name,
