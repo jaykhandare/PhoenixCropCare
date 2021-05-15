@@ -1,6 +1,8 @@
 from django import template
 from django.template.defaultfilters import stringfilter
 
+from django.core.files.storage import FileSystemStorage
+
 
 register = template.Library()
 
@@ -27,4 +29,13 @@ def format_label(value):
         value = " ".join([x.capitalize() for x in value.split("_")])
     return value
 
-# print(format_label("SD_receipt_code"))
+
+@register.filter(name="get_profile_picture")
+def get_profile_picture(username):
+    fs = FileSystemStorage()
+    file_name = './users/' + username + '.png'
+    if fs.exists(file_name):
+        return fs.url(file_name)
+    return fs.url('./users/' + 'profilePic' + '.png')
+
+    
