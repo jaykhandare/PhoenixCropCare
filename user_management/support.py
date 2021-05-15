@@ -182,18 +182,20 @@ def create_dealer_user_profile(data):
 # used to save dealer info for future, if it is deleted
 def save_deleted_dealer(dealer=None):
     if dealer is not None:
+        dealer_obj = Dealer_Profile.objects.get(code=dealer.code, managed_by=dealer.managed_by)
         try:
             Deleted_Dealers.objects.create(
-                first_name=dealer.first_name,
-                last_name=dealer.last_name,
-                firm_name=dealer.firm_name,
-                managed_by=dealer.managed_by,
-                address=dealer.address,
-                city=dealer.city,
-                pin_code=dealer.pin_code,
-                contact=dealer.contact,
-                email=dealer.email
+                first_name=dealer_obj.first_name,
+                last_name=dealer_obj.last_name,
+                firm_name=dealer_obj.firm_name,
+                managed_by=dealer_obj.managed_by,
+                address=dealer_obj.address,
+                city=dealer_obj.city,
+                pin_code=dealer_obj.pin_code,
+                contact=dealer_obj.contact,
+                email=dealer_obj.email
             )
+            dealer_obj.delete()
         except Exception as e:
             print(e)
     else:

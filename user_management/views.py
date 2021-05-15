@@ -190,12 +190,18 @@ def remove_dealer(request):
             return render(request, "custom_templates/page-404.html")
 
         save_deleted_dealer(retrieved_dealer)
+        username = retrieved_dealer.first_name.lower()[0] + retrieved_dealer.last_name.lower() + "404"
         try:
             retrieved_dealer.delete()
         except Exception as e:
             print(e)
             return render(request, "custom_templates/page-500.html")
-
+        else:
+            try:
+                user_obj = User.objects.get(username=username)
+                user_obj.delete()
+            except:
+                pass
         return redirect('all_dealers')
 
 

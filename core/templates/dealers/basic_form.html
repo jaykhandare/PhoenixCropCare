@@ -27,6 +27,7 @@
 
                         </div>
                     </div>
+
                     {% if data %}
                         {% load formatter %}
                         <form method="post" action="">
@@ -41,8 +42,8 @@
                                                     {% if name == "authorized" or name == "agreement_done" or name == "gift_sent" %}
                                                         <label for="formGroupDefaultSelect" class="col-md-5 col-form-label">{{name|format_label}}</label>
                                                         <select class="form-control" id="formGroupDefaultSelect" name="{{name}}" value="{{value}}">
-                                                            <option {% if value == True %} selected {% endif%}>True</option>
                                                             <option {% if value == False %} selected {% endif%}>False</option>
+                                                            <option {% if value == True %} selected {% endif%}>True</option>
                                                         </select>
                                                     {% elif name == "pd_open_date" or name == "SD_receipt_date" %}
                                                         <label for="inlineinput" class="col-md-11 col-form-label">{{name|format_label}}</label>
