@@ -208,3 +208,8 @@ def remove_dealer(request):
 def testFunction(request):
     print("TEST")
     return render(request, "custom_templates/page-500.html")
+
+
+@login_required
+def home_view(request):
+    return render(request, "custom_templates/home.html")
