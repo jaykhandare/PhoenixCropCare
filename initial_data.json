@@ -180,20 +180,5 @@
             "gift_sent": false,
             "authorized": true
         }
-    },
-    {
-        "model": "user_management.deleted_dealers",
-        "pk": 1,
-        "fields": {
-            "first_name": "xdf",
-            "last_name": "xdf",
-            "firm_name": "xdf",
-            "managed_by": "nmodi",
-            "address": "xdf",
-            "city": "xdf",
-            "pin_code": "xdf",
-            "contact": "xdf",
-            "email": "xdf@g.com"
-        }
     }
 ]

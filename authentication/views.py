@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from random import randint
 from core.settings import DEBUG
 
-from user_management.views import initiate_user_profile
+from user_management.views import initiate_user_profile, home_view
 
 
 def register_user(request):
@@ -73,6 +73,8 @@ def login_view(request):
     msg = None
 
     if request.method == "GET":
+        if request.user.is_authenticated:
+            return home_view(request)
         form = LoginForm()
     elif request.method == "POST":
         form = LoginForm(request.POST)
@@ -82,11 +84,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                if DEBUG:
-                    return redirect("login")
-                else:
-                    # redirect to user homepage later
-                    return redirect("/")
+                return redirect("/home/")
             else:
                 msg = 'Invalid credentials'
         else:

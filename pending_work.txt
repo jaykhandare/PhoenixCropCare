@@ -1,13 +1,4 @@
-dashboard for users or dealers not created
-    users
-        -
-        -
-        -
-        -
-        -
-    dealers
-        -
-        -
-        -
-        -
-        -
+add functions in the sidebar for users  - in progress
+add functions in the sidebar for dealers
+
+create app for orders

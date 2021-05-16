@@ -32,13 +32,15 @@ def remove_user(request):
         return render(request, "custom_templates/unauthorized_access.html")
 
     if request.method == "GET":
-        return render(request, "accounts/delete_form.html", {'form' : UserDeleteForm})
+        return render(request, "accounts/delete_form.html", {'form': UserDeleteForm})
     elif request.method == "POST":
         user_creds = request.POST.dict()
         try:
-            user_obj = User.objects.get(username=user_creds['username'], email=user_creds['email'])
+            user_obj = User.objects.get(
+                username=user_creds['username'], email=user_creds['email'])
             user_obj.delete()
-            user_profile = User_Profile.objects.get(username=user_creds['username'])
+            user_profile = User_Profile.objects.get(
+                username=user_creds['username'])
             user_profile.delete()
         except Exception as e:
             print(e)
@@ -89,7 +91,6 @@ def profile(request):
             data['date_of_birth'] = profile_obj.date_of_birth
             data['date_of_joining'] = profile_obj.date_of_joining
 
-
             file_name = './users/' + username + '.png'
             if fs.exists(file_name):
                 profile_picture_url = fs.url(file_name)
@@ -99,7 +100,6 @@ def profile(request):
 
     elif request.method == "POST":
         user_data = request.POST.dict()
-
         try:
             uploaded_pic = request.FILES['profile_picture']
         except:
@@ -189,7 +189,6 @@ def remove_dealer(request):
         except Exception as e:
             return render(request, "custom_templates/page-404.html")
 
-        save_deleted_dealer(retrieved_dealer)
         username = retrieved_dealer.first_name.lower()[0] + retrieved_dealer.last_name.lower() + "404"
         try:
             retrieved_dealer.delete()
