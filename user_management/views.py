@@ -202,8 +202,3 @@ def remove_dealer(request):
             except:
                 pass
         return redirect('all_dealers')
-
-
-@login_required
-def home_view(request):
-    return render(request, "custom_templates/home.html")

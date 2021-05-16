@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authentication',
     'user_management',
+    'functions',
 ]
 
 MIDDLEWARE = [
@@ -56,8 +57,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
-LOGIN_REDIRECT_URL = "home"
-LOGOUT_REDIRECT_URL = "home"
+# LOGIN_REDIRECT_URL = "home"
+# LOGOUT_REDIRECT_URL = "home"
 TEMPLATE_DIR = os.path.join(CORE_DIR, "templates")
 
 TEMPLATES = [

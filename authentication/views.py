@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 from random import randint
 from core.settings import DEBUG
 
-from user_management.views import initiate_user_profile, home_view
-
+from user_management.views import initiate_user_profile
+from functions.views import home_view
 
 def register_user(request):
     msg = None

@@ -25,6 +25,8 @@ urlpatterns = [
     path("", include("authentication.urls")),
     # user management 
     path("", include("user_management.urls")),
+    # various functions
+    path("", include("functions.urls")),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
