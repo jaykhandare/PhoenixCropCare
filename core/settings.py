@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'authentication',
     'user_management',
     'functions',
+    'order_management',
 ]
 
 MIDDLEWARE = [
@@ -57,8 +58,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
-# LOGIN_REDIRECT_URL = "home"
-# LOGOUT_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
 TEMPLATE_DIR = os.path.join(CORE_DIR, "templates")
 
 TEMPLATES = [
