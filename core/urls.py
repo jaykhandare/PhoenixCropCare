@@ -27,8 +27,6 @@ urlpatterns = [
     path("", include("user_management.urls")),
     # various functions
     path("", include("functions.urls")),
-    # orders management
-    path("", include("order_management.urls")),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
