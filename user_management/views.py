@@ -204,11 +204,6 @@ def remove_dealer(request):
         return redirect('all_dealers')
 
 
-def testFunction(request):
-    print("TEST")
-    return render(request, "custom_templates/page-500.html")
-
-
 @login_required
 def home_view(request):
     return render(request, "custom_templates/home.html")
