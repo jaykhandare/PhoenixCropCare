@@ -21,7 +21,7 @@ def all_users(request):
         all_users_data = User.objects.all()
         headers = ["Username", "First Name", "Last Name",
                    "Email", "Last Active", "Actions for account", ]
-        return render(request, "custom_templates/tables-simple.html", {"data": all_users_data, "headers": headers, "type": "users"})
+        return render(request, "custom_templates/profile-table.html", {"data": all_users_data, "headers": headers, "type": "users"})
     else:
         return render(request, "custom_templates/page-404.html")
 
@@ -54,15 +54,21 @@ def remove_user(request):
 
 
 @login_required
-def all_dealers(request):
+def all_dealers(request, internal_call=None, data=None):
     if not is_staff(request):
         return render(request, "custom_templates/unauthorized_access.html")
 
     if request.method == "GET":
-        all_dealers_data = Dealer_Profile.objects.all()
+        if internal_call is None:
+            dealers_data = Dealer_Profile.objects.all()
+        else:
+            if data is None:
+                return render(request, "custom_templates/page-500.html")
+            else:
+                dealers_data = data
         headers = ["Code", "First Name", "Last Name", "Firm Name",
                    "Contact", "Managed By", "Authorized", "Actions for account"]
-        return render(request, "custom_templates/tables-simple.html", {"data": all_dealers_data, "headers": headers, "type": "dealers"})
+        return render(request, "custom_templates/profile-table.html", {"data": dealers_data, "headers": headers, "type": "dealers"})
     else:
         return render(request, "custom_templates/page-404.html")
 
