@@ -47,8 +47,6 @@ def get_total_sales(request):
     if request.method == "POST":
         return render(request, "custom_templates/page-404.html")
 
-    username = request.user.username
-
     return render(request, "custom_templates/home.html")
 
 
@@ -60,20 +58,6 @@ def get_my_position_hierarchy(request):
         return render(request, "custom_templates/page-404.html")
 
     username = request.user.username
-
-    return render(request, "custom_templates/home.html")
-
-
-def get_products(request):
-    if request.method == "POST":
-        return render(request, "custom_templates/page-404.html")
-
-    return render(request, "custom_templates/home.html")
-
-
-def get_offers(request):
-    if request.method == "POST":
-        return render(request, "custom_templates/page-404.html")
 
     return render(request, "custom_templates/home.html")
 
