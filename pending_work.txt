@@ -1,4 +1,5 @@
 make a connection between dealer as an user and dealer profile to get data
 
+remove atlantis logo
 add functions in the sidebar for users
 add functions in the sidebar for dealers

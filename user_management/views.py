@@ -10,29 +10,30 @@ from os import path
 from user_management.forms import DealerDeleteForm, UserDeleteForm
 from user_management.models import Dealer_Profile, User_Profile
 from user_management.support import *
+from core.template_declarations import *
 
 
 @login_required
 def all_users(request):
     if not is_staff(request):
-        return render(request, "custom_templates/unauthorized_access.html")
+        return render(request, ERROR_403)
 
     if request.method == "GET":
         all_users_data = User.objects.all()
         headers = ["Username", "First Name", "Last Name",
                    "Email", "Last Active", "Actions for account", ]
-        return render(request, "custom_templates/profile-table.html", {"data": all_users_data, "headers": headers, "type": "users"})
+        return render(request, PROFILE_TABLE, {"data": all_users_data, "headers": headers, "type": "users"})
     else:
-        return render(request, "custom_templates/page-404.html")
+        return render(request, ERROR_404)
 
 
 @login_required
 def remove_user(request):
     if not is_staff(request):
-        return render(request, "custom_templates/unauthorized_access.html")
+        return render(request, ERROR_403)
 
     if request.method == "GET":
-        return render(request, "accounts/delete_form.html", {'form': UserDeleteForm})
+        return render(request, USER_DELETE, {'form': UserDeleteForm})
     elif request.method == "POST":
         user_creds = request.POST.dict()
         try:
@@ -44,7 +45,7 @@ def remove_user(request):
             user_profile.delete()
         except Exception as e:
             print(e)
-            return render(request, "custom_templates/page-500.html")
+            return render(request, ERROR_500)
         else:
             fs = FileSystemStorage()
             file_name = './users/' + user_creds['username'] + '.png'
@@ -56,27 +57,27 @@ def remove_user(request):
 @login_required
 def all_dealers(request, internal_call=None, data=None):
     if not is_staff(request):
-        return render(request, "custom_templates/unauthorized_access.html")
+        return render(request, ERROR_403)
 
     if request.method == "GET":
         if internal_call is None:
             dealers_data = Dealer_Profile.objects.all()
         else:
             if data is None:
-                return render(request, "custom_templates/page-500.html")
+                return render(request, ERROR_500)
             else:
                 dealers_data = data
         headers = ["Code", "First Name", "Last Name", "Firm Name",
                    "Contact", "Managed By", "Authorized", "Actions for account"]
-        return render(request, "custom_templates/profile-table.html", {"data": dealers_data, "headers": headers, "type": "dealers"})
+        return render(request, PROFILE_TABLE, {"data": dealers_data, "headers": headers, "type": "dealers"})
     else:
-        return render(request, "custom_templates/page-404.html")
+        return render(request, ERROR_404)
 
 
 @login_required
 def profile(request):
     if not is_staff(request):
-        return render(request, "custom_templates/unauthorized_access.html")
+        return render(request, ERROR_403)
 
     fs = FileSystemStorage()
     profile_picture_url = None
@@ -87,7 +88,7 @@ def profile(request):
             profile_obj = User_Profile.objects.get(username=username)
         except Exception as e:
             print(e)
-            return render(request, "custom_templates/page-500.html")
+            return render(request, ERROR_500)
         else:
             data = model_to_dict(profile_obj)
             # remove not needed fields
@@ -102,7 +103,7 @@ def profile(request):
                 profile_picture_url = fs.url(file_name)
             else:
                 profile_picture_url = fs.url('./users/profilePic.png')
-            return render(request, "accounts/profile.html", {"data": data, "profile_picture": profile_picture_url})
+            return render(request, USER_PROFILE, {"data": data, "profile_picture": profile_picture_url})
 
     elif request.method == "POST":
         user_data = request.POST.dict()
@@ -127,7 +128,7 @@ def profile(request):
                 username=user_data['old_username'])
         except Exception as e:
             print(e)
-            return render(request, "custom_templates/page-500.html")
+            return render(request, ERROR_500)
 
         profile_obj.username = user_data['username']
         profile_obj.address = user_data['address']
@@ -145,19 +146,19 @@ def profile(request):
             profile_obj.save()
         except Exception as e:
             print(e)
-            return render(request, "custom_templates/page-500.html")
+            return render(request, ERROR_500)
         else:
-            return render(request, "accounts/profile.html", {"msg": "Profile updated"})
+            return render(request, USER_PROFILE, {"msg": "Profile updated"})
 
 
 @login_required
 def register_dealer(request):
     if not is_staff(request):
-        return render(request, "custom_templates/unauthorized_access.html")
+        return render(request, ERROR_403)
 
     if request.method == "GET":
         dealer_ordered_list = get_dealer_ordered_list(managed_by=request.user)
-        return render(request, "dealers/basic_form.html", {"data": dealer_ordered_list, "type": "register"})
+        return render(request, DEALER_REG_EDIT, {"data": dealer_ordered_list, "type": "register"})
     elif request.method == "POST":
         dealer_data = request.POST.dict()
         return save_data_and_respond(request=request, data=dealer_data, processing_type="ADD")
@@ -166,14 +167,14 @@ def register_dealer(request):
 @login_required
 def edit_dealer(request):
     if not is_staff(request):
-        return render(request, "custom_templates/unauthorized_access.html")
+        return render(request, ERROR_403)
 
     if request.method == "GET":
         firm_name = request.GET['firm_name']
         data = get_dealer_ordered_list(firm_name=firm_name)
         if data is None:
-            return render(request, "custom_templates/page-404.html")
-        return render(request, "dealers/basic_form.html", {"data": data, "type": "edit"})
+            return render(request, ERROR_404)
+        return render(request, DEALER_REG_EDIT, {"data": data, "type": "edit"})
     elif request.method == "POST":
         dealer_data = request.POST.dict()
         return save_data_and_respond(request=request, data=dealer_data, processing_type="EDIT")
@@ -182,18 +183,18 @@ def edit_dealer(request):
 @login_required
 def remove_dealer(request):
     if not is_staff(request):
-        return render(request, "custom_templates/unauthorized_access.html")
+        return render(request, ERROR_403)
 
     if request.method == "GET":
         form = DealerDeleteForm()
-        return render(request, "dealers/delete_form.html", {"form": form})
+        return render(request, DEALER_DELETE, {"form": form})
     elif request.method == "POST":
         dealer = request.POST.dict()
         try:
             retrieved_dealer = Dealer_Profile.objects.get(
                 code=dealer['code'], managed_by=dealer['managed_by'])
         except Exception as e:
-            return render(request, "custom_templates/page-404.html")
+            return render(request, ERROR_404)
 
         username = retrieved_dealer.first_name.lower(
         )[0] + retrieved_dealer.last_name.lower() + "404"
@@ -201,7 +202,7 @@ def remove_dealer(request):
             retrieved_dealer.delete()
         except Exception as e:
             print(e)
-            return render(request, "custom_templates/page-500.html")
+            return render(request, ERROR_500)
         else:
             try:
                 user_obj = User.objects.get(username=username)

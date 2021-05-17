@@ -7,6 +7,7 @@ from core.settings import DEBUG
 
 from user_management.views import initiate_user_profile
 from functions.views import home_view
+from core.template_declarations import *
 
 def register_user(request):
     msg = None
@@ -21,7 +22,7 @@ def register_user(request):
                 form.save()
             except Exception as e:
                 print(e)
-                return render(request, "custom_templates/page-404.html")
+                return render(request, ERROR_404)
 
             first_name = form.cleaned_data.get("first_name")
             last_name = form.cleaned_data.get("last_name")
@@ -31,7 +32,7 @@ def register_user(request):
             except Exception as e:
                 msg = 'User cannot be created. Exception : {}'.format(str(e))
                 print(e)
-                return render(request, "custom_templates/page-500.html")
+                return render(request, ERROR_500)
             else:
                 username = ""
                 if DEBUG:
@@ -47,12 +48,12 @@ def register_user(request):
                     usr_obj.save()
                 except Exception as e:
                     print(e)
-                    return render(request, "custom_templates/page-500.html")
+                    return render(request, ERROR_500)
 
                 # add an empty entry in profile table
                 is_initiated = initiate_user_profile(username=username)
                 if not is_initiated:
-                    return render(request, "custom_templates/page-500.html")
+                    return render(request, ERROR_500)
 
                 if DEBUG:
                     user = authenticate(
@@ -66,7 +67,7 @@ def register_user(request):
         else:
             msg = 'Form is not valid'
 
-    return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
+    return render(request, USER_REGISTER, {"form": form, "msg": msg, "success": success})
 
 
 def login_view(request):
@@ -90,9 +91,9 @@ def login_view(request):
         else:
             msg = 'Error validating the form'
 
-    return render(request, "accounts/login.html", {"form": form, "msg": msg})
+    return render(request, USER_LOGIN, {"form": form, "msg": msg})
 
 
 def logout_view(request):
     logout(request)
-    return render(request, "accounts/logout.html")
+    return render(request, USER_LOGOUT)

@@ -6,6 +6,7 @@ from user_management.models import User_Profile, Dealer_Profile
 from django.shortcuts import render
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
+from core.template_declarations import *
 
 
 # used to differentiate among employees and authorized dealers
@@ -85,7 +86,7 @@ def get_dealer_ordered_list(firm_name=None, managed_by=None):
         ordered_list[26][1] = dealer_obj.agreement_done
         ordered_list[27][1] = dealer_obj.gift_sent
         ordered_list[28][1] = dealer_obj.authorized
-        
+
         return ordered_list
 
 
@@ -95,7 +96,7 @@ def save_data_and_respond(request=None, data=None, processing_type=None):
     if data is None or request is None:
         print("incorrect method call in the code.")
         print("Something wrong, I can feel it.")
-        return render(request, "custom_templates/page-500.html")
+        return render(request, ERROR_500)
     """
     # this weird logic is used to avoid following scenario errors
         dealer(firm_name) is already edited and saved, but user hits refresh button
@@ -157,19 +158,20 @@ def save_data_and_respond(request=None, data=None, processing_type=None):
         dealer_obj.save()
     except Exception as e:
         print("Exception: ", e)
-        return render(request, "custom_templates/page-500.html")
+        return render(request, ERROR_500)
     else:
         if data['authorized'] in ["True", "1", 1, True]:
             # create an user profile for dealer if he's authorized
             if not create_dealer_user_profile(data):
-                return render(request, "custom_templates/page-500.html")
+                return render(request, ERROR_500)
 
-        return render(request, "dealers/basic_form.html", {"msg": msg})
+        return render(request, DEALER_REG_EDIT, {"msg": msg})
 
 
 # used to create a basic user profile when the dealer is authorized
 def create_dealer_user_profile(data):
-    username = data['first_name'].lower()[0] + data['last_name'].lower() + "404"
+    username = data['first_name'].lower(
+    )[0] + data['last_name'].lower() + "404"
     try:
         User.objects.create(username=username,
                             password=make_password(username),
