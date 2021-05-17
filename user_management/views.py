@@ -195,7 +195,8 @@ def remove_dealer(request):
         except Exception as e:
             return render(request, "custom_templates/page-404.html")
 
-        username = retrieved_dealer.first_name.lower()[0] + retrieved_dealer.last_name.lower() + "404"
+        username = retrieved_dealer.first_name.lower(
+        )[0] + retrieved_dealer.last_name.lower() + "404"
         try:
             retrieved_dealer.delete()
         except Exception as e:
