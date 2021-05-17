@@ -37,5 +37,3 @@ def get_profile_picture(username):
     if fs.exists(file_name):
         return fs.url(file_name)
     return fs.url('./users/' + 'profilePic' + '.png')
-
-    

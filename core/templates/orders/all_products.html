@@ -14,7 +14,7 @@
 						<div class="card-title">
 							{% if msg %}
 								<span class="text-danger">{{ msg | safe }}</span>
-							{% elif not data %}
+							{% elif not objects %}
 								<div class="page-category">
 									<h2>Empty table</h2>
 									<h3 class="font-weight-light">
@@ -23,23 +23,34 @@
 								</div>
 							{% else %}
 								<span>
-									Table
+									Add items to the cart
 								</span>
 							{% endif %}
 						</div>
 					</div>
-					{% if data %}
+					{% if objects %}
 						<div class="card-body">
 							<table class="table table-hover">
 								<tbody>
-									{% for product in data %}
-										<tr>
-											<td>{{ product.type }}</td>
-											<td>{{ product.name }}</td>
-											<td>{{ product.price }}</td>
-											<td>pictureLink</td>
-										</tr>
-									{% endfor %}
+									<form method="post" action="">
+										{% csrf_token %}
+
+										{% for product in objects %}
+											<tr>
+												<td>{{ product.type }}</td>
+												<td>{{ product.name }}</td>
+												<td>{{ product.price }}</td>
+												<td> Product Info </td>
+												<td> pictureLink </td>
+												<td>
+													<div class="col-md-6 p-0">
+														<input type="number" min="0" class="form-control" name="quantity{{product.id}}" value="0">
+													</div>
+												</td>
+											</tr>
+										{% endfor %}
+										<button type="submit" class="btn btn-success">Checkout</button>
+									</form>
 								</tbody>
 							</table>
 						</div>
@@ -51,35 +62,4 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}
-
-	<script>
-		$('#displayNotif').on('click', function(){
-			var placementFrom = $('#notify_placement_from option:selected').val();
-			var placementAlign = $('#notify_placement_align option:selected').val();
-			var state = $('#notify_state option:selected').val();
-			var style = $('#notify_style option:selected').val();
-			var content = {};
-
-			content.message = 'Turning standard Bootstrap alerts into "notify" like notifications';
-			content.title = 'Bootstrap notify';
-			if (style == "withicon") {
-				content.icon = 'fa fa-bell';
-			} else {
-				content.icon = 'none';
-			}
-			content.url = 'index.html';
-			content.target = '_blank';
-
-			$.notify(content,{
-				type: state,
-				placement: {
-					from: placementFrom,
-					align: placementAlign
-				},
-				time: 1000,
-			});
-		});
-	</script>
-	
-{% endblock javascripts %}
+{% block javascripts %}{% endblock javascripts %}

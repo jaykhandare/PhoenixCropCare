@@ -1,8 +1,9 @@
 from django.urls import path
-from order_management.views import add_product, get_product_list
+from order_management.views import add_product, add_item_to_cart, checkout
 
 urlpatterns = [
     path('add_product/', add_product, name="add_product"),
-    path('get_product_list/', get_product_list, name="get_product_list"),
+    path('add_item_to_cart/', add_item_to_cart, name="add_item_to_cart"),
+    path('checkout/', checkout, name="checkout"),
 
 ]

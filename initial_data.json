@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "password": "pbkdf2_sha256$260000$5g8UizIcpjdICVwYwzdmdC$ooAgEjJBqrvnJYn3ec0hrFDdrLdUr1uZ+IP1a/4RokY=",
-            "last_login": "2021-05-15T13:53:11.347Z",
+            "last_login": "2021-05-17T00:05:44.971Z",
             "is_superuser": false,
             "username": "jkhandare",
             "first_name": "Jayendra",
@@ -179,6 +179,42 @@
             "agreement_done": false,
             "gift_sent": false,
             "authorized": true
+        }
+    },
+    {
+        "model": "order_management.product",
+        "pk": 1,
+        "fields": {
+            "type": "Bio Products",
+            "name": "BS 21 BATTERY",
+            "price": 3400.0
+        }
+    },
+    {
+        "model": "order_management.product",
+        "pk": 2,
+        "fields": {
+            "type": "Bio Products",
+            "name": "PHOENIX BIO ZYM",
+            "price": 470.0
+        }
+    },
+    {
+        "model": "order_management.product",
+        "pk": 3,
+        "fields": {
+            "type": "Water Soluble",
+            "name": "NF 2",
+            "price": 1100.0
+        }
+    },
+    {
+        "model": "order_management.product",
+        "pk": 4,
+        "fields": {
+            "type": "Water Soluble",
+            "name": "BS 13",
+            "price": 3500.0
         }
     }
 ]
