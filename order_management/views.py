@@ -25,11 +25,16 @@ def add_product(request):
                 float(product_data['price'])
             except Exception as e:
                 return render(request, ORDER_ADD_PRODUCT, {"msg": "price should be in numbers"})
-            Product.objects.create(
+            product_obj = Product.objects.create(
                 type=product_data['type'], name=product_data['name'], price=float(product_data['price']))
-        except Exception as e:
-            print(e)
-            return render(request, ERROR_500)
+            product_obj.full_clean()
+            product_obj.save()
+        except Exception as error_set:
+            print("Error: ", error_set)
+            err_response = ""
+            for error in error_set:
+                err_response += error[0] + " : " + error[1][0] + "</br>"
+            return render(request, ORDER_ADD_PRODUCT, {"msg": err_response})
         else:
             msg = "Product {} added".format(product_data['name'])
             return render(request, ORDER_ADD_PRODUCT, {"msg": msg})

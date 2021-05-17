@@ -206,20 +206,12 @@ def remove_dealer(request):
         try:
             retrieved_dealer = Dealer_Profile.objects.get(
                 code=dealer['code'], managed_by=dealer['managed_by'])
-        except Exception as e:
-            return render(request, ERROR_404)
-
-        username = retrieved_dealer.first_name.lower(
-        )[0] + retrieved_dealer.last_name.lower() + "404"
-        try:
-            retrieved_dealer.delete()
+            username = retrieved_dealer.first_name.lower()[0] + retrieved_dealer.last_name.lower() + "404"
+            user_obj = User.objects.get(username=username)
         except Exception as e:
             print(e)
-            return render(request, ERROR_500)
+            return render(request, ERROR_404)
         else:
-            try:
-                user_obj = User.objects.get(username=username)
-                user_obj.delete()
-            except:
-                pass
+            user_obj.delete()
+            retrieved_dealer.delete()
         return redirect('all_dealers')

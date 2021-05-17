@@ -123,7 +123,6 @@ def save_data_and_respond(request=None, data=None, processing_type=None):
         return render(request, ERROR_500)
 
     dealer_obj = None
-    print(data)
     if processing_type == "ADD":
         try:
             dealer_obj = Dealer_Profile(
@@ -190,28 +189,19 @@ def save_data_and_respond(request=None, data=None, processing_type=None):
             User.objects.get(username=username)
         except:
             try:
-                User.objects.create(username=username,
+                user_obj = User.objects.create(username=username,
                                     password=make_password(username),
                                     first_name=data['first_name'],
                                     last_name=data['last_name'])
-            except Exception as e:
-                print(e)
-                return render(request, ERROR_500)
+                user_obj.full_clean()
+                user_obj.save()
+            except Exception as error_set:
+                print("Error: ", error_set)
+                err_response = ""
+                for error in error_set:
+                    err_response += error[0] + " : " + error[1][0] + "</br>"
+                dealer_data = get_dealer_ordered_list(dict_input=data)
+                return render(request, DEALER_REG_EDIT, {"data": dealer_data, "msg": err_response})
 
     msg = "Dealer information added" if processing_type == "ADD" else "Dealer information modified"
     return render(request, DEALER_REG_EDIT, {"msg": msg})
-
-
-# used to create a basic user profile when the dealer is authorized
-def create_dealer_user_profile(data):
-    username = data['first_name'].lower(
-    )[0] + data['last_name'].lower() + "404"
-    try:
-        User.objects.create(username=username,
-                            password=make_password(username),
-                            first_name=data['first_name'],
-                            last_name=data['last_name'])
-    except Exception as e:
-        print(e)
-        return False
-    return True
