@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from user_management.support import is_staff
+from user_management.support import is_employee
 from user_management.models import Dealer_Profile
 from user_management.views import all_dealers
 from core.template_declarations import *
@@ -13,7 +13,7 @@ def home_view(request):
 
 @login_required
 def get_my_dealers(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
     if request.method == "POST":
         return render(request, ERROR_404)
@@ -31,7 +31,7 @@ def get_my_dealers(request):
 
 @login_required
 def get_my_sales(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
     if request.method == "POST":
         return render(request, ERROR_404)
@@ -43,7 +43,7 @@ def get_my_sales(request):
 
 @login_required
 def get_total_sales(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
     if request.method == "POST":
         return render(request, ERROR_404)
@@ -53,7 +53,7 @@ def get_total_sales(request):
 
 @login_required
 def get_my_position_hierarchy(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
     if request.method == "POST":
         return render(request, ERROR_404)

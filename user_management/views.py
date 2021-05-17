@@ -15,7 +15,7 @@ from core.template_declarations import *
 
 @login_required
 def all_users(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
 
     if request.method == "GET":
@@ -29,7 +29,7 @@ def all_users(request):
 
 @login_required
 def all_dealers(request, internal_call=None, data=None):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
 
     if request.method == "GET":
@@ -49,7 +49,7 @@ def all_dealers(request, internal_call=None, data=None):
 
 @login_required
 def remove_user(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
 
     if request.method == "GET":
@@ -76,7 +76,7 @@ def remove_user(request):
 
 @login_required
 def profile(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
 
     fs = FileSystemStorage()
@@ -166,7 +166,7 @@ def profile(request):
 
 @login_required
 def register_dealer(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
 
     if request.method == "GET":
@@ -179,7 +179,7 @@ def register_dealer(request):
 
 @login_required
 def edit_dealer(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
 
     if request.method == "GET":
@@ -195,7 +195,7 @@ def edit_dealer(request):
 
 @login_required
 def remove_dealer(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
 
     if request.method == "GET":

@@ -1,4 +1,5 @@
-add checks for constraints to everything related to models
+code generate_transaction_report for checkout functionality
+
 remove atlantis logo
 add functions in the sidebar for users
 add functions in the sidebar for dealers

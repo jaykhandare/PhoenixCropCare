@@ -1,0 +1,38 @@
+[
+    {
+        "model": "order_management.product",
+        "pk": 1,
+        "fields": {
+            "type": "Bio Products",
+            "name": "XML 1",
+            "price": 23.6
+        }
+    },
+    {
+        "model": "order_management.product",
+        "pk": 2,
+        "fields": {
+            "type": "Seeds",
+            "name": "XML 23",
+            "price": 11110.0
+        }
+    },
+    {
+        "model": "order_management.product",
+        "pk": 3,
+        "fields": {
+            "type": "Water Soluble",
+            "name": "JSON",
+            "price": 12.564
+        }
+    },
+    {
+        "model": "order_management.product",
+        "pk": 4,
+        "fields": {
+            "type": "Farming Consulting",
+            "name": "JSON 455",
+            "price": 789.35
+        }
+    }
+]

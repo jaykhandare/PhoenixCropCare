@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from user_management.support import is_staff
+from user_management.support import is_employee
 from order_management.models import Product, Order, Transaction
 from order_management.support import generate_transaction_report, create_session_dict
 from core.template_declarations import *
@@ -13,7 +13,7 @@ def test(request):
 
 @login_required
 def add_product(request):
-    if not is_staff(request):
+    if not is_employee(request):
         return render(request, ERROR_403)
 
     if request.method == "GET":

@@ -10,7 +10,7 @@ from core.template_declarations import *
 
 
 # used to differentiate among employees and authorized dealers
-def is_staff(request):
+def is_employee(request):
     # returns True if user is an employee
     if request.user.username[-3:] == "404":
         return False
