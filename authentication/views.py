@@ -2,10 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from authentication.forms import LoginForm, SignUpForm
 from django.contrib.auth.models import User
+from user_management.models import User_Profile
 from random import randint
 from core.settings import DEBUG
 
-from user_management.views import initiate_user_profile
 from functions.views import home_view
 from core.template_declarations import *
 
@@ -31,7 +31,7 @@ def register_user(request):
                     first_name=first_name, last_name=last_name, username="")
             except Exception as e:
                 msg = 'User cannot be created. Exception : {}'.format(str(e))
-                print(e)
+                print(msg)
                 return render(request, ERROR_500)
             else:
                 username = ""
@@ -46,13 +46,9 @@ def register_user(request):
                 usr_obj.username = username
                 try:
                     usr_obj.save()
+                    User_Profile.objects.create(username=username)
                 except Exception as e:
                     print(e)
-                    return render(request, ERROR_500)
-
-                # add an empty entry in profile table
-                is_initiated = initiate_user_profile(username=username)
-                if not is_initiated:
                     return render(request, ERROR_500)
 
                 if DEBUG:
