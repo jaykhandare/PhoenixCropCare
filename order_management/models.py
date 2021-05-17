@@ -12,7 +12,7 @@ class Order(models.Model):
     product_code    = models.CharField(max_length=7)
     quntity         = models.CharField(max_length=3)
     UOM             = models.CharField(max_length=7)
-
+    total_price     = models.FloatField(blank=False)
 
 class Transaction(models.Model):
     trans_code          = models.CharField(max_length=15, unique=True)

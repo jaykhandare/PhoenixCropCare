@@ -35,7 +35,7 @@ class Dealer_Profile(models.Model):
     district    = models.CharField(max_length=15)
     state       = models.CharField(max_length=15)
     pin_code    = models.CharField(max_length=6)
-    contact     = models.CharField(max_length=30)
+    contact     = models.CharField(max_length=15, unique=True)
     email       = models.EmailField()
 
     pan_number          = models.CharField(max_length=15)

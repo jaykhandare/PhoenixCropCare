@@ -1,9 +1,4 @@
-create app for orders
-    add model for products and fill db with dummy items
-    add model for storing orders and processing them
-    implement shopping cart per dealer using session
-    
-
+make a connection between dealer as an user and dealer profile to get data
 
 add functions in the sidebar for users
 add functions in the sidebar for dealers

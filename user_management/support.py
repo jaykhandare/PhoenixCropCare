@@ -172,7 +172,9 @@ def create_dealer_user_profile(data):
     username = data['first_name'].lower()[0] + data['last_name'].lower() + "404"
     try:
         User.objects.create(username=username,
-                            password=make_password(username))
+                            password=make_password(username),
+                            first_name=data['first_name'],
+                            last_name=data['last_name'])
     except Exception as e:
         print(e)
         return False
