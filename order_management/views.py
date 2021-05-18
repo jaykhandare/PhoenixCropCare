@@ -59,10 +59,12 @@ def add_item_to_cart(request):
 @login_required
 def checkout(request):
     report = generate_transaction_report(
-        dealer_name=request.user.username, session_cart=request.session["cart"])
+        dealer_username=request.user.username, session_cart=request.session["cart"])
     if report is None:
         return render(request, ERROR_500)
 
+    # populate ORDER_CHECKOUT with report with some fields as editable like discount, etc
+    # put a button to submit these editable fields which will go to POST
     if request.method == "GET":
         return render(request, ORDER_CHECKOUT, {"report": report})
     elif request.method == "POST":

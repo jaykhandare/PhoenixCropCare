@@ -1,4 +1,4 @@
-code generate_transaction_report for checkout functionality
+format ORDER_CHECKOUT to show the report and editable fields
 
 remove atlantis logo
 add functions in the sidebar for users
