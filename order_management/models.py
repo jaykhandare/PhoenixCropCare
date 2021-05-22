@@ -6,13 +6,13 @@ class Product(models.Model):
     name    = models.CharField(max_length=25, blank=False)
     price   = models.FloatField(blank=False)
     details = models.TextField(blank=True)
+    uom     = models.CharField(max_length=7, blank=True)
 
 
 class Order(models.Model):
     invoice_number  = models.PositiveIntegerField(blank=False)
     product_code    = models.PositiveIntegerField(blank=False)
     quntity         = models.PositiveIntegerField(blank=False)
-    uom             = models.CharField(max_length=7, blank=True)
     total_price     = models.FloatField(blank=False)
 
 class Transaction(models.Model):
@@ -25,4 +25,4 @@ class Transaction(models.Model):
     is_accepted         = models.BooleanField(default=False)
     is_dispatched       = models.BooleanField(default=False)
     is_closed           = models.BooleanField(default=False)
-    date                = models.DateField(auto_now_add=True)
+    dateTime            = models.DateTimeField(auto_now_add=True)

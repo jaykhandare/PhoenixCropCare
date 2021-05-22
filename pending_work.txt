@@ -1,5 +1,8 @@
-format ORDER_CHECKOUT to show the report and editable fields
+format ORDER_CHECKOUT to show the report with editable fields
+    user details part done
+    work on order part
 
+add functions for remove_product, edit_product
 remove atlantis logo
 add functions in the sidebar for users
 add functions in the sidebar for dealers

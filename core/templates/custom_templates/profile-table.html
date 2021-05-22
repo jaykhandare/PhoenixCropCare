@@ -30,68 +30,70 @@
 					</div>
 					{% if data %}
 						<div class="card-body">
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										{% for header in headers %}
-											<th scope="col">{{ header }}</th>
-										{% endfor %}
-									</tr>
-								</thead>
-								{% if type == "users" %}
-									<tbody>
-										{% for user in data %}
-											<tr>
-												<td>{{user.username}}</td>
-												<td>{{user.first_name}}</td>
-												<td>{{user.last_name}}</td>
-												<td>{{user.email}}</td>
-												<td>{{user.last_login}}</td>
-												<td>
-													<div class="form-button-action">
-														{% if "404" not in user.username %}
-															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit">
-																<a href="{% url 'profile'%}?username={{user.username}}"> <i class="fa fa-edit"></i> </a>
+							<div class="table-responsive">
+								<table class="display table table-striped table-hover">
+									<thead>
+										<tr>
+											{% for header in headers %}
+												<th scope="col">{{ header }}</th>
+											{% endfor %}
+										</tr>
+									</thead>
+									{% if type == "users" %}
+										<tbody>
+											{% for user in data %}
+												<tr>
+													<td>{{user.username}}</td>
+													<td>{{user.first_name}}</td>
+													<td>{{user.last_name}}</td>
+													<td>{{user.email}}</td>
+													<td>{{user.last_login}}</td>
+													<td>
+														<div class="form-button-action">
+															{% if "404" not in user.username %}
+																<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit">
+																	<a href="{% url 'profile'%}?username={{user.username}}"> <i class="fa fa-edit"></i> </a>
+																</button>
+																<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove">
+																	<a href="{% url 'remove_user'%}"> <i class="fa fa-times"></i> </a>
+																</button>
+															{% else %}
+																<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Go to dealers page">
+																	<a href="{% url 'all_dealers'%}"> Dealer Account </a>
+																</button>
+															{% endif %}
+														</div>
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									{% elif type == "dealers" %}
+										<tbody>
+											{% for dealer in data %}
+												<tr>
+													<td>{{dealer.code}}</td>
+													<td>{{dealer.first_name}}</td>
+													<td>{{dealer.last_name}}</td>
+													<td>{{dealer.firm_name}}</td>
+													<td>{{dealer.contact}}</td>
+													<td>{{dealer.managed_by}}</td>
+													<td>{{dealer.authorized}}</td>
+													<td>
+														<div class="form-button-action">
+															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Edit">
+																<a href="{% url 'edit_dealer'%}?firm_name={{dealer.firm_name}}"> <i class="fa fa-edit"></i> </a>
 															</button>
 															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove">
-																<a href="{% url 'remove_user'%}"> <i class="fa fa-times"></i> </a>
+																<a href="{% url 'remove_dealer'%}"> <i class="fa fa-times"></i> </a>
 															</button>
-														{% else %}
-															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Go to dealers page">
-																<a href="{% url 'all_dealers'%}"> Dealer Account </a>
-															</button>
-														{% endif %}
-													</div>
-												</td>
-											</tr>
-										{% endfor %}
-									</tbody>
-								{% elif type == "dealers" %}
-									<tbody>
-										{% for dealer in data %}
-											<tr>
-												<td>{{dealer.code}}</td>
-												<td>{{dealer.first_name}}</td>
-												<td>{{dealer.last_name}}</td>
-												<td>{{dealer.firm_name}}</td>
-												<td>{{dealer.contact}}</td>
-												<td>{{dealer.managed_by}}</td>
-												<td>{{dealer.authorized}}</td>
-												<td>
-													<div class="form-button-action">
-														<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Edit">
-															<a href="{% url 'edit_dealer'%}?firm_name={{dealer.firm_name}}"> <i class="fa fa-edit"></i> </a>
-														</button>
-														<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove">
-															<a href="{% url 'remove_dealer'%}"> <i class="fa fa-times"></i> </a>
-														</button>
-													</div>
-												</td>
-											</tr>
-										{% endfor %}
-									</tbody>
-								{% endif %}
-							</table>
+														</div>
+													</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									{% endif %}
+								</table>
+							</div>
 						</div>
 					{% endif %}
 				</div>

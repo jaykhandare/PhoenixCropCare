@@ -6,7 +6,6 @@ from django.core.files.storage import FileSystemStorage
 
 register = template.Library()
 
-
 @register.filter(name="format_label")
 @stringfilter
 def format_label(value):

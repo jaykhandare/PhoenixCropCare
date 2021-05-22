@@ -1,0 +1,78 @@
+{
+    "dealer_profile": {
+        "id": 2,
+        "firm_name": "XYZ",
+        "code": "XYZ",
+        "auth_number": "XYZ",
+        "first_name": "XY",
+        "last_name": "YZ",
+        "pd_open_date": null,
+        "address": "XYZ",
+        "city": "XYZ",
+        "taluka": "XYZ",
+        "district": "XYZ",
+        "state": "XYZ",
+        "pin_code": "XYZ",
+        "contact": "2943857",
+        "email": "xyz@test.com",
+        "pan_number": "XYZ",
+        "GST_number": "XYZ",
+        "seed_license": "XYZ",
+        "pesticide_license": "XYZ",
+        "fertilizer_license": "XYZ",
+        "SD_receipt_code": "XYZ",
+        "SD_expected": "XYZ",
+        "SD_deposited": "XYZ",
+        "SD_receipt_date": null,
+        "SD_payment_type": "UPI",
+        "exp_first_order": "XYZ",
+        "managed_by": "nmodi",
+        "agreement_done": true,
+        "gift_sent": true,
+        "authorized": true
+    },
+    "orders_details": [
+        {
+            "name": "XML 1",
+            "type": "Bio Products",
+            "code": 1,
+            "quantity": 3,
+            "CGST": 3.54,
+            "SGST": 0.0,
+            "IGST": 0.0,
+            "total_price": 74.34
+        },
+        {
+            "name": "XML 23",
+            "type": "Seeds",
+            "code": 2,
+            "quantity": 1,
+            "CGST": 555.5,
+            "SGST": 0.0,
+            "IGST": 0.0,
+            "total_price": 11665.5
+        },
+        {
+            "name": "JSON 455",
+            "type": "Farming Consulting",
+            "code": 4,
+            "quantity": 1,
+            "CGST": 39.47,
+            "SGST": 0.0,
+            "IGST": 0.0,
+            "total_price": 828.82
+        }
+    ],
+    "trans_details": {
+        "id": 47,
+        "invoice_number": 47,
+        "customer_code": "XYZ",
+        "mode_of_transport": "",
+        "total_pre_tax": 11970.15,
+        "discount_percent": 0.0,
+        "total_price_taxed": 12568.66,
+        "is_accepted": false,
+        "is_dispatched": false,
+        "is_closed": false
+    }
+}

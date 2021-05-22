@@ -4,10 +4,10 @@ from user_management.support import is_employee
 from order_management.models import Product, Order, Transaction
 from order_management.support import generate_transaction_report, create_session_dict
 from core.template_declarations import *
+import json
 
-
-@login_required
 def test(request):
+    print(request)
     return render(request, HOME)
 
 
@@ -26,7 +26,7 @@ def add_product(request):
             except Exception as e:
                 return render(request, ORDER_ADD_PRODUCT, {"msg": "price should be in numbers"})
             product_obj = Product.objects.create(
-                type=product_data['type'], name=product_data['name'], price=float(product_data['price']))
+                type=product_data['type'], name=product_data['name'], price=float(product_data['price']), uom=product_data['uom'])
             product_obj.full_clean()
             product_obj.save()
         except Exception as error_set:
@@ -58,14 +58,25 @@ def add_item_to_cart(request):
 
 @login_required
 def checkout(request):
-    report = generate_transaction_report(
-        dealer_username=request.user.username, session_cart=request.session["cart"])
-    if report is None:
-        return render(request, ERROR_500)
 
     # populate ORDER_CHECKOUT with report with some fields as editable like discount, etc
     # put a button to submit these editable fields which will go to POST
     if request.method == "GET":
+        report = generate_transaction_report(
+            dealer_username=request.user.username, session_cart=request.session["cart"])
+        if report is None:
+            return render(request, ERROR_500)
         return render(request, ORDER_CHECKOUT, {"report": report})
     elif request.method == "POST":
-        return render(request, ORDER_CHECKOUT, {"success": True, "report": report})
+        data = request.POST.dict()
+        try:
+            transaction = Transaction.objects.get(invoice_number=data['trans_id'])
+            transaction.mode_of_transport = data['mode_of_transport']
+            transaction.is_accepted = True
+            transaction.full_clean()
+            transaction.save()
+        except Exception as e:
+            print(e)
+            return render(request, ERROR_500)
+
+        return render(request, ORDER_CHECKOUT, {"success": True, "msg": "Order submitted. Thank you."})

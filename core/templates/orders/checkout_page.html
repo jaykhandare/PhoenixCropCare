@@ -6,11 +6,192 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-	<div class="content">
-		<div class="page-inner">
-            The report will be shown here.
-		</div>
-	</div>
+
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">Checkout</h4>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+
+                            {% if msg %}
+                                <span class="text-danger">{{ msg | safe }}</span>
+                            {% else %}
+                                <span>
+                                    Please check and confirm the order
+                                </span>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                    {% if report %}
+                        {% load formatter %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <input type="hidden" name="trans_id" value="{{ report.trans_details.invoice_number }}">
+                            <div class="card-body">
+								<div class="">
+									<div class="row">
+										<h3> Dealer Details </h3>
+									</div>
+									<div class="row">
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"first_name"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.first_name}}</div>
+										</div>
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"last_name"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.last_name}}</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"auth_number"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.auth_number}}</div>
+										</div>
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"firm_name"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.firm_name}}</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"address"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.address}}</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group form-inline col-md-3 my-0 py-0">
+											<label class="col-form-label">{{"city"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.city}}</div>
+										</div>
+										<div class="form-group form-inline col-md-3 my-0 py-0">
+											<label class="col-form-label">{{"taluka"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.taluka}}</div>
+										</div>
+										<div class="form-group form-inline col-md-3 my-0 py-0">
+											<label class="col-form-label">{{"district"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.district}}</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"state"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.state}}</div>
+										</div>
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"pin_code"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.pin_code}}</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"contact"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.contact}}</div>
+										</div>
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"email"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.email}}</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"pan_number"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.pan_number}}</div>
+										</div>
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"GST_number"|format_label}}</label>
+											<div class="p-1">{{report.dealer_profile.GST_number}}</div>
+										</div>
+									</div>
+								</div>
+								<div class="">
+									<div class="row">
+										<h3> Transaction Details </h3>
+									</div>
+									<div class="row">
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"invoice_number"|format_label}}</label>
+											<div class="p-1">{{report.trans_details.invoice_number}}</div>
+										</div>
+										<div class="form-group form-inline col-md-6 my-0 py-0">
+											<label class="col-form-label">{{"mode_of_transport"|format_label}}</label>
+											<div class="p-1">
+												<select class="form-control" id="formGroupDefaultSelect" name="mode_of_transport">
+                                                    <option>option1</option>
+                                                    <option>option2</option>
+                                                    <option>option3</option>
+                                                </select>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<h4> Order Details </h4>
+									</div>
+									<div class="row">
+										<div class="table-responsive">
+											<table class="display table table-striped table-hover">
+												<thead>
+													<tr>
+														<th>Item code</th>
+														<th>Name</th>
+														<th>Type</th>
+														<th>Quantity</th>
+														<th>Price</th>
+														<th>CGST</th>
+														<th>SGST</th>
+														<th>IGST</th>
+														<th>Total</th>
+													</tr>
+												</thead>
+												<tbody>
+													{% for item in report.orders_details%}
+														<tr>
+															<td>{{item.code}}</td>
+															<td>{{item.name}}</td>
+															<td>{{item.type}}</td>
+															<td>{{item.quantity}}</td>
+															<td>{{item.price}}</td>
+															<td>{{item.CGST}}</td>
+															<td>{{item.SGST}}</td>
+															<td>{{item.IGST}}</td>
+															<td>{{item.total_price}}</td>
+														</tr>
+													{% endfor %}
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group form-inline col-md-3 my-0 py-0">
+											<label class="col-form-label">Discount</label>
+											<div class="p-1">{{report.trans_details.discount_percent}}</div>
+										</div>
+										<div class="form-group form-inline col-md-3 my-0 py-0">
+											<label class="col-form-label">Total before Tax</label>
+											<div class="p-1">{{report.trans_details.total_pre_tax}}</div>
+										</div>
+										<div class="form-group form-inline col-md-3 my-0 py-0">
+											<label class="col-form-label">Total after Tax</label>
+											<div class="p-1">{{report.trans_details.total_price_taxed}}</div>
+										</div>
+									</div>
+	                            </div>
+                            </div>
+                            <div class="card-action">
+                                <button type="submit" class="btn btn-success">Confirm</button>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
