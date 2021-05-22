@@ -4,7 +4,7 @@
 				<div class="sidebar-content">
 
 				{% if request.user.is_authenticated %}
-				{% load formatter %}
+				{% load user_tags %}
 					<div class="user">
 						<div class="avatar-lg float-left mr-2">
 							<img src="{{ request.user.username|get_profile_picture }}" alt="..." class="avatar-img rounded-circle">

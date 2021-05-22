@@ -12,7 +12,7 @@ class Product(models.Model):
 class Order(models.Model):
     invoice_number  = models.PositiveIntegerField(blank=False)
     product_code    = models.PositiveIntegerField(blank=False)
-    quntity         = models.PositiveIntegerField(blank=False)
+    quantity        = models.PositiveIntegerField(blank=False)
     total_price     = models.FloatField(blank=False)
 
 class Transaction(models.Model):
@@ -22,6 +22,7 @@ class Transaction(models.Model):
     total_pre_tax       = models.FloatField(default=0)
     discount_percent    = models.FloatField(default=0)
     total_price_taxed   = models.FloatField(default=0)
+    payment_type        = models.CharField(max_length=30, blank=True)
     is_accepted         = models.BooleanField(default=False)
     is_dispatched       = models.BooleanField(default=False)
     is_closed           = models.BooleanField(default=False)

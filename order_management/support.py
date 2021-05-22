@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from user_management.models import Dealer_Profile
 from order_management.models import Product, Order, Transaction
 from django.forms.models import model_to_dict
+from ast import literal_eval
+
 
 CGST = 5
 SGST = 0
@@ -22,7 +24,7 @@ def create_session_dict(data):
     return session_dict
 
 
-def generate_transaction_report(dealer_username=None, session_cart=None):
+def generate_transaction_report(dealer_username=None, session=None):
     # gathering dealer info
     trans_report = {}
     try:
@@ -40,65 +42,89 @@ def generate_transaction_report(dealer_username=None, session_cart=None):
         print(e)
         return None
     dealer_profile = model_to_dict(dealer_obj)
-
     trans_report["dealer_profile"] = dealer_profile
-
-    # setting transaction code in the database
-    invoice_number = Transaction.objects.count() + 1
-    trans_obj = Transaction.objects.create(
-        invoice_number=invoice_number, customer_code=dealer_profile['code'])
 
     # processing session cart
     pre_tax_total = post_tax_total = 0
-    for product_id, quantity in session_cart.items():
-        product_obj = Product.objects.get(id=product_id)
-        total_price_obj = round(product_obj.price * quantity, ROUND_UP)
-        pre_tax_total += total_price_obj
-        try:
-            order_obj = Order.objects.create(invoice_number=invoice_number, product_code=product_obj.id,
-                                             quntity=quantity, total_price=total_price_obj)
-            order_obj.full_clean()
-            order_obj.save()
-        except Exception as e:
-            print("Exceptions while creating order at {}".format(__name__))
-            print(e)
-
     orders_details = []
-    orders = Order.objects.filter(invoice_number=invoice_number)
-    for order in orders:
-        try:
-            retrieved_product_obj = Product.objects.get(id=order.product_code)
-        except Exception as e:
-            print(e)
-            raise ValueError("Undefined object being purchased")
-        else:
-            dict_this = {}
-            dict_this["name"] = retrieved_product_obj.name
-            dict_this["type"] = retrieved_product_obj.type
-            dict_this["code"] = order.product_code
-            dict_this["quantity"] = order.quntity
-            dict_this["price"] = order.total_price
-            dict_this["CGST"] = round(order.total_price * CGST / 100, ROUND_UP)
-            dict_this["SGST"] = round(order.total_price * SGST / 100, ROUND_UP)
-            dict_this["IGST"] = round(order.total_price * IGST / 100, ROUND_UP)
-            dict_this["total_price"] = order.total_price + \
-                dict_this["CGST"] + dict_this["SGST"] + dict_this["IGST"]
-            dict_this["total_price"] = round(
-                dict_this["total_price"], ROUND_UP)
-            post_tax_total += dict_this["total_price"]
-            orders_details.append(dict_this)
+
+    if session['cart'] is None:
+        return None
+    for product_id, quantity in session['cart'].items():
+        product_obj = Product.objects.get(id=product_id)
+        price = round(product_obj.price * quantity, ROUND_UP)
+        pre_tax_total += price
+        dict_this = {}
+        dict_this["name"] = product_obj.name
+        dict_this["type"] = product_obj.type
+        dict_this["code"] = product_id
+        dict_this["quantity"] = quantity
+        dict_this["price"] = price
+        dict_this["CGST"] = round(price * CGST / 100, ROUND_UP)
+        dict_this["SGST"] = round(price * SGST / 100, ROUND_UP)
+        dict_this["IGST"] = round(price * IGST / 100, ROUND_UP)
+        dict_this["total_price"] = price + \
+            dict_this["CGST"] + dict_this["SGST"] + dict_this["IGST"]
+        dict_this["total_price"] = round(
+            dict_this["total_price"], ROUND_UP)
+        post_tax_total += dict_this["total_price"]
+        orders_details.append(dict_this)
+
     trans_report["orders_details"] = orders_details
 
-    trans_obj.total_pre_tax = round(pre_tax_total, ROUND_UP)
-    trans_obj.total_price_taxed = round(post_tax_total, ROUND_UP)
+    trans_details = {}
+    trans_details['total_pre_tax'] = round(pre_tax_total, ROUND_UP)
+    trans_details['total_price_taxed'] = round(post_tax_total, ROUND_UP)
+    trans_report["trans_details"] = trans_details
+
+    session['cart'] = None
+
+    return trans_report
+
+
+def save_transaction(data=None):
+    if data is None:
+        print("no data provided in {}".format(__name__))
+        return False
+
+    report = literal_eval(data['report'])
+    if "<class 'dict'>" != str(type(report)):
+        print("invalid data in {}".format(__name__))
+        return False
+
+    dealer_code = report['dealer_code']
+    mode_of_transport = data['mode_of_transport']
+    payment_type = data['payment_type']
+    orders = report['orders_details']
+    transaction = report['trans_details']
+
+    # add transaction
     try:
+        transaction_count = Transaction.objects.count() + 1
+        trans_obj = Transaction.objects.create(
+            invoice_number=transaction_count,
+            customer_code=dealer_code,
+            mode_of_transport=mode_of_transport,
+            total_pre_tax=transaction['total_pre_tax'],
+            total_price_taxed=transaction['total_price_taxed'],
+            payment_type=payment_type,
+            is_accepted=True)
         trans_obj.full_clean()
         trans_obj.save()
     except Exception as e:
-        print("Exceptions while saving transaction at {}".format(__name__))
         print(e)
+        return False
 
-    trans_details = model_to_dict(trans_obj)
-    trans_report["trans_details"] = trans_details
+    # add orders
+    for order in orders:
+        try:
+            order_obj = Order.objects.create(invoice_number=transaction_count, product_code=order['code'], quantity=order['quantity'], total_price=order['price'])
+            order_obj.full_clean()
+            order_obj.save()
+        except Exception as e:
+            trans_obj.delete()
+            order_obj.delete()
+            print(e)
+            return False
 
-    return trans_report
+    return True

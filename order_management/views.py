@@ -1,10 +1,11 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from user_management.support import is_employee
-from order_management.models import Product, Order, Transaction
-from order_management.support import generate_transaction_report, create_session_dict
+from order_management.models import Product
+from order_management.support import create_session_dict, generate_transaction_report, save_transaction
 from core.template_declarations import *
 import json
+
 
 def test(request):
     print(request)
@@ -58,25 +59,19 @@ def add_item_to_cart(request):
 
 @login_required
 def checkout(request):
-
     # populate ORDER_CHECKOUT with report with some fields as editable like discount, etc
     # put a button to submit these editable fields which will go to POST
     if request.method == "GET":
         report = generate_transaction_report(
-            dealer_username=request.user.username, session_cart=request.session["cart"])
+            dealer_username=request.user.username, session=request.session)
         if report is None:
             return render(request, ERROR_500)
         return render(request, ORDER_CHECKOUT, {"report": report})
     elif request.method == "POST":
         data = request.POST.dict()
-        try:
-            transaction = Transaction.objects.get(invoice_number=data['trans_id'])
-            transaction.mode_of_transport = data['mode_of_transport']
-            transaction.is_accepted = True
-            transaction.full_clean()
-            transaction.save()
-        except Exception as e:
-            print(e)
-            return render(request, ERROR_500)
-
-        return render(request, ORDER_CHECKOUT, {"success": True, "msg": "Order submitted. Thank you."})
+        if save_transaction(data):
+            return render(request, ORDER_CHECKOUT, {"success": True, "msg": "Order submitted. Thank you."})
+        return render(request, 
+                      ORDER_CHECKOUT, 
+                      {"success": False, "msg": "Order cannot be submitted. Sorry for the inconvinience. Please try again later."}
+                    )
