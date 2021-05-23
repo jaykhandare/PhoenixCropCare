@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Profiles {% endblock %} 
+{% block title %} Products {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -16,7 +16,7 @@
 								<span class="text-danger">{{ msg | safe }}</span>
 							{% elif not objects %}
 								<div class="page-category">
-									<h2>Empty table</h2>
+									<h2>Empty product table</h2>
 									<h3 class="font-weight-light">
 										There is no data to be displayed.
 									</h3>
@@ -47,6 +47,18 @@
 														<input type="number" min="0" class="form-control" name="quantity{{product.id}}" value="0">
 													</div>
 												</td>
+												{% if is_staff %}
+													<td>
+														<div class="form-button-action">
+															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Edit">
+																<a href="{% url 'edit_product'%}?product_id={{product.id}}"> <i class="fa fa-edit"></i> </a>
+															</button>
+															<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove">
+																<a href="{% url 'remove_product'%}?product_id={{product.id}}"> <i class="fa fa-times"></i> </a>
+															</button>
+														</div>
+													</td>
+												{% endif %}
 											</tr>
 										{% endfor %}
 										<button type="submit" class="btn btn-success">Checkout</button>

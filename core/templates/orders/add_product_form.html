@@ -30,6 +30,9 @@
 
                     <form method="post" action="">
                         {% csrf_token %}
+                        {% if product %}
+                            <input type="hidden" name="id" value="{{product.id}}">
+                        {% endif %}
 
                         <div class="card-body">
                             <div class="row">
@@ -39,29 +42,29 @@
                                             <div class="input-group-prepend">
                                                 <label for="inlineinput" class="col-md-5 col-form-label">Product Type</label>
                                                 <select class="form-control" id="formGroupDefaultSelect" name="type">
-                                                    <option>Bio Products</option>
-                                                    <option>Seeds</option>
-                                                    <option>Pesticides</option>
-                                                    <option>Water Soluble</option>
-                                                    <option>Agri Equipments</option>
-                                                    <option>Farming Consulting</option>
+                                                    <option {% if product.type == "Bio Products" %} selected {% endif %}>Bio Products</option>
+                                                    <option {% if product.type == "Seeds" %} selected {% endif %}>Seeds</option>
+                                                    <option {% if product.type == "Pesticides" %} selected {% endif %}>Pesticides</option>
+                                                    <option {% if product.type == "Water Soluble" %} selected {% endif %}>Water Soluble</option>
+                                                    <option {% if product.type == "Agri Equipments" %} selected {% endif %}>Agri Equipments</option>
+                                                    <option {% if product.type == "Farming Consulting" %} selected {% endif %}>Farming Consulting</option>
                                                 </select>
                                             </div>
                                             <div class="input-group-prepend">
                                                 <label for="inlineinput" class="col-md-5 col-form-label">Product Name</label>
-                                                <input type="text" class="form-control" name="name">
+                                                <input type="text" class="form-control" name="name" value="{% if product %} {{product.name}} {% endif %}">
                                             </div>
                                             <div class="input-group-prepend">
                                                 <label for="inlineinput" class="col-md-5 col-form-label">Product Price</label>
-                                                <input type="text" class="form-control" name="price">
+                                                <input type="text" class="form-control" name="price" value="{% if product %} {{product.price}} {% endif %}">
                                             </div>
                                             <div class="input-group-prepend">
                                                 <label for="inlineinput" class="col-md-5 col-form-label">UOM</label>
                                                 <select class="form-control" id="formGroupDefaultSelect" name="uom">
-                                                    <option>bags</option>
-                                                    <option>items</option>
-                                                    <option>kgs</option>
-                                                    <option>N/A</option>
+                                                    <option {% if product.type == "bags" %} selected {% endif %}>bags</option>
+                                                    <option {% if product.type == "items" %} selected {% endif %}>items</option>
+                                                    <option {% if product.type == "kgs" %} selected {% endif %}>kgs</option>
+                                                    <option {% if product.type == "N/A" %} selected {% endif %}>N/A</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -71,7 +74,7 @@
                         </div>
                         <div class="card-action">
                             <button type="submit" class="btn btn-success">
-                                Add
+                                {% if product %} Modify {% else %} Add {% endif %}
                             </button>
                         </div>
                     </form>

@@ -1,7 +1,4 @@
 hitting refresh at checkout[GET] causes new entries to be added again and again, fix that
-add functions to edit, remove a transaction if not able to fulfill
-add functions to modify an order before checkout
-add functions for remove_product, edit_product
 remove atlantis logo
 add functions in the sidebar for users
 add functions in the sidebar for dealers
