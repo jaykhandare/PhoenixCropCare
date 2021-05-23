@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Checkout {% endblock %} 
+{% block title %} Transaction {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -9,7 +9,7 @@
 
     <div class="page-inner">
         <div class="page-header">
-            <h4 class="page-title">Checkout</h4>
+            <h4 class="page-title">Transaction</h4>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -21,7 +21,7 @@
                                 <span class="text-danger">{{ msg | safe }}</span>
                             {% else %}
                                 <span>
-                                    Please check and confirm the order
+                                    Details
                                 </span>
                             {% endif %}
 

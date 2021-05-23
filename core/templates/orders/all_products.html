@@ -12,20 +12,17 @@
 				<div class="card">
 					<div class="card-header">
 						<div class="card-title">
-							{% if msg %}
-								<span class="text-danger">{{ msg | safe }}</span>
-							{% elif not objects %}
-								<div class="page-category">
-									<h2>Empty product table</h2>
-									<h3 class="font-weight-light">
-										There is no data to be displayed.
-									</h3>
-								</div>
-							{% else %}
-								<span>
-									Add items to the cart
-								</span>
-							{% endif %}
+
+                            {% if msg %}
+                                <span class="text-danger">{{ msg | safe }}</span>
+                            {% else %}
+								{% if is_staff %}
+								<span>All Products</span>
+								{% else %}
+                                <span>Please check and confirm the order</span>
+								{% endif %}
+                            {% endif %}
+
 						</div>
 					</div>
 					{% if objects %}

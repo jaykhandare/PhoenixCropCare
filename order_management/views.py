@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from user_management.support import is_employee
-from order_management.models import Product
+from order_management.models import Product, Transaction
 from order_management.support import create_session_dict, generate_transaction_report, save_transaction
 from core.template_declarations import *
 
@@ -111,3 +111,27 @@ def checkout(request):
             return render(request, ORDER_CHECKOUT, {"success": True, "msg": "Order submitted. Thank you."})
         msg = "Order cannot be submitted. Sorry for the inconvinience. Please try again later."
         return render(request, ORDER_CHECKOUT, {"success": False, "msg": msg})
+
+
+@login_required
+def all_transactions(request):
+    all_trans = None
+    if request.method == "GET":
+        headers = ["invoice_number", "mode_of_transport", "total_pre_tax", "discount_percent", "total_price_taxed", "payment_type", "is_accepted", "is_dispatched", "is_closed", "dateTime", "actions"]
+        if is_employee(request):
+            all_trans = Transaction.objects.all()
+        else:
+            try:
+                all_trans = Transaction.objects.filter(customer_code=request.GET['customer_code'])
+            except Exception as e:
+                print(e)
+                return render(request, ERROR_500)
+        return render(request, ALL_TRANSACTIONS, {"is_staff" : is_employee(request), "headers" : headers ,"transactions" : all_trans})
+
+    elif request.method == "POST":
+        return render(request, ERROR_403)
+
+
+@login_required
+def view_transaction(request):
+    pass

@@ -1,0 +1,76 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Transactions {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">Transactions</h4>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+
+                            {% if msg %}
+                                <span class="text-danger">{{ msg | safe }}</span>
+                            {% else %}
+								{% if is_staff %}
+								<span>All Transactions</span>
+								{% else %}
+                                <span>My Transactions</span>
+								{% endif %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+					<div class="card-body">
+						<div class="table-responsive">
+							<table class="display table table-striped table-hover">
+								<thead>
+									<tr>
+										{% for header in headers %}
+											<th scope="col">{{ header }}</th>
+										{% endfor %}
+									</tr>
+								</thead>
+								<tbody>
+									{% for transaction in transactions %}
+										<tr>
+											<td>{{transaction.invoice_number}}</td>
+											<td>{{transaction.mode_of_transport}}</td>
+											<td>{{transaction.total_pre_tax}}</td>
+											<td>{{transaction.discount_percent}}</td>
+											<td>{{transaction.total_price_taxed}}</td>
+											<td>{{transaction.payment_type}}</td>
+											<td>{{transaction.is_accepted}}</td>
+											<td>{{transaction.is_dispatched}}</td>
+											<td>{{transaction.is_closed}}</td>
+											<td>{{transaction.dateTime}}</td>
+											<td>
+												<div class="form-button-action">
+													<button type="button" data-toggle="tooltip" title="view transaction" class="btn btn-link btn-danger" data-original-title="Edit">
+														<a href="{% url 'view_transaction'%}?invoice_number={{transaction.invoice_number}}"> <i class="fa fa-expand"></i> </a>
+													</button>
+												</div>
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
