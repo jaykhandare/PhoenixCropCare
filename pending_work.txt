@@ -1,4 +1,3 @@
-hitting refresh at checkout[GET] causes new entries to be added again and again, fix that
 remove atlantis logo
 add functions in the sidebar for users
 add functions in the sidebar for dealers
