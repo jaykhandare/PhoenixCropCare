@@ -1,0 +1,61 @@
+ {% extends "layouts/base.html" %}
+
+{% block title %} Taxes {% endblock title %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">Taxes</h4>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+
+                            {% if msg %}
+                                <span class="text-danger">{{ msg | safe }}</span>
+                            {% else %}
+                                <span>
+                                    Taxes
+                                </span>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+                    {% if taxes %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="col">
+                                    {% for tax_item in taxes %}
+                                        <div class="col-md-3 col-lg-4">
+                                            <div class="form-group form-inline">
+                                                <label for="inlineinput" class="col-md-3 col-form-label">{{tax_item.name}}</label>
+                                                <div class="col-md-9 p-0">
+                                                    <input type="text" class="form-control" id="inlineinput" name="{{tax_item.id}}" value="{{tax_item.rate}}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="card-action">
+                                <button type="submit" class="btn btn-success">Update</button>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE -->
+{% block javascripts %}{% endblock javascripts %}

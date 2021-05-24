@@ -1,4 +1,3 @@
-add GSTs in a database to be updated with forms
 remove atlantis logo
 add functions in the sidebar for users
 add functions in the sidebar for dealers

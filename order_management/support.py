@@ -3,16 +3,14 @@
 """
 
 from django.contrib.auth.models import User
-from user_management.models import Dealer_Profile
-from order_management.models import Product, Order, Transaction
 from django.forms.models import model_to_dict
 from ast import literal_eval
+from user_management.models import Dealer_Profile
+from order_management.models import Product, Order, Transaction
+from functions.support import get_tax_variables
 import json
 
 
-CGST = 5
-SGST = 0
-IGST = 0
 ROUND_UP = 2
 
 
@@ -51,6 +49,10 @@ def generate_transaction_report(dealer_username=None, session_cart=None, type=No
     # processing session cart
     pre_tax_total = post_tax_total = 0
     orders_details = []
+
+    # setting up tax variables
+    SGST, CGST, IGST = get_tax_variables()
+
 
     for product_id, quantity in session_cart.items():
         product_obj = Product.objects.get(id=product_id)

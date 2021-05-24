@@ -1,0 +1,26 @@
+[
+    {
+        "model": "functions.taxes",
+        "pk": 1,
+        "fields": {
+            "name": "SGST",
+            "rate": 0.0
+        }
+    },
+    {
+        "model": "functions.taxes",
+        "pk": 2,
+        "fields": {
+            "name": "CGST",
+            "rate": 5.0
+        }
+    },
+    {
+        "model": "functions.taxes",
+        "pk": 3,
+        "fields": {
+            "name": "IGST",
+            "rate": 0.0
+        }
+    }
+]
