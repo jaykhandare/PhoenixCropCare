@@ -35,43 +35,25 @@
         {
             "name": "XML 1",
             "type": "Bio Products",
-            "code": 1,
+            "code": "1",
             "quantity": 3,
+            "price": 70.8,
             "CGST": 3.54,
             "SGST": 0.0,
             "IGST": 0.0,
             "total_price": 74.34
-        },
-        {
-            "name": "XML 23",
-            "type": "Seeds",
-            "code": 2,
-            "quantity": 1,
-            "CGST": 555.5,
-            "SGST": 0.0,
-            "IGST": 0.0,
-            "total_price": 11665.5
-        },
-        {
-            "name": "JSON 455",
-            "type": "Farming Consulting",
-            "code": 4,
-            "quantity": 1,
-            "CGST": 39.47,
-            "SGST": 0.0,
-            "IGST": 0.0,
-            "total_price": 828.82
         }
     ],
     "trans_details": {
-        "id": 47,
-        "invoice_number": 47,
+        "id": 1,
+        "invoice_number": 1,
         "customer_code": "XYZ",
-        "mode_of_transport": "",
-        "total_pre_tax": 11970.15,
+        "mode_of_transport": "option2",
+        "total_pre_tax": 70.8,
         "discount_percent": 0.0,
-        "total_price_taxed": 12568.66,
-        "is_accepted": false,
+        "total_price_taxed": 74.34,
+        "payment_type": "UPI",
+        "is_accepted": true,
         "is_dispatched": false,
         "is_closed": false
     }

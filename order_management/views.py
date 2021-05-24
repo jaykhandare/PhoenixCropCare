@@ -2,9 +2,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from user_management.support import is_employee
 from order_management.models import Product, Transaction
-from order_management.support import create_session_dict, generate_transaction_report, save_transaction
+from order_management.support import create_session_dict, generate_transaction_report, save_transaction, retrieve_report
 from core.template_declarations import *
-
 
 def test(request):
     print(request)
@@ -100,14 +99,17 @@ def all_products(request):
 def checkout(request):
     if request.method == "GET":
         report = generate_transaction_report(
-            dealer_username=request.user.username, session=request.session)
+            dealer_username=request.user.username, session_cart=request.session['cart'], type="CHECKOUT")
         if report is None:
             return render(request, ERROR_500)
+        request.session['cart'] = None
+        request.session.save()
         return render(request, ORDER_CHECKOUT, {"report": report})
     elif request.method == "POST":
         data = request.POST.dict()
         if save_transaction(data):
             request.session['cart'] = None
+            request.session.save()
             return render(request, ORDER_CHECKOUT, {"success": True, "msg": "Order submitted. Thank you."})
         msg = "Order cannot be submitted. Sorry for the inconvinience. Please try again later."
         return render(request, ORDER_CHECKOUT, {"success": False, "msg": msg})
@@ -134,4 +136,11 @@ def all_transactions(request):
 
 @login_required
 def view_transaction(request):
-    pass
+    if request.method == "GET":
+        report = retrieve_report(dealer_username=request.user.username, invoice_number=request.GET['invoice_number'])
+        if report is None:
+            return render(request, ERROR_500)
+        return render(request, VIEW_TRANSACTION, {"report": report})
+
+    elif request.method == "POST":
+        return render(request, ERROR_403)

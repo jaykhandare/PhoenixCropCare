@@ -22,3 +22,4 @@ ORDER_ALL_PRODUCTS  = "orders/all_products.html"
 ORDER_CHECKOUT      = "orders/checkout_page.html"
 
 ALL_TRANSACTIONS = "orders/all_transactions.html"
+VIEW_TRANSACTION = "orders/view_transaction.html"

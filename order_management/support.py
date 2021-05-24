@@ -7,6 +7,7 @@ from user_management.models import Dealer_Profile
 from order_management.models import Product, Order, Transaction
 from django.forms.models import model_to_dict
 from ast import literal_eval
+import json
 
 
 CGST = 5
@@ -24,7 +25,10 @@ def create_session_dict(data):
     return session_dict
 
 
-def generate_transaction_report(dealer_username=None, session=None):
+def generate_transaction_report(dealer_username=None, session_cart=None, type=None, invoice_number=None):
+    if session_cart is None:
+        return None
+
     # gathering dealer info
     trans_report = {}
     try:
@@ -48,9 +52,7 @@ def generate_transaction_report(dealer_username=None, session=None):
     pre_tax_total = post_tax_total = 0
     orders_details = []
 
-    if session['cart'] is None:
-        return None
-    for product_id, quantity in session['cart'].items():
+    for product_id, quantity in session_cart.items():
         product_obj = Product.objects.get(id=product_id)
         price = round(product_obj.price * quantity, ROUND_UP)
         pre_tax_total += price
@@ -71,14 +73,23 @@ def generate_transaction_report(dealer_username=None, session=None):
         orders_details.append(dict_this)
 
     trans_report["orders_details"] = orders_details
-
     trans_details = {}
-    trans_details['total_pre_tax'] = round(pre_tax_total, ROUND_UP)
-    trans_details['total_price_taxed'] = round(post_tax_total, ROUND_UP)
+
+    if type == "CHECKOUT":
+        trans_details['total_pre_tax'] = round(pre_tax_total, ROUND_UP)
+        trans_details['total_price_taxed'] = round(post_tax_total, ROUND_UP)
+    elif type == "VIEW":
+        try:
+            trans_obj = Transaction.objects.get(invoice_number=invoice_number)
+        except Exception as e:
+            print(e)
+            return None
+        else:
+            trans_details = model_to_dict(trans_obj)
+    else:
+        return None
+
     trans_report["trans_details"] = trans_details
-
-    session['cart'] = None
-
     return trans_report
 
 
@@ -126,5 +137,21 @@ def save_transaction(data=None):
             order_obj.delete()
             print(e)
             return False
-    
+
     return True
+
+
+def retrieve_report(dealer_username=None, invoice_number=None):
+    # now here we mimick a fake session by retrieving orders based on invoice_number
+    # and call generate_transaction_report with all necessary details to get a report
+    # all we need is to mimick session something like {'1': 1, '3': 2} key is product_id, value is quantity
+    mimicked_session_cart = {}
+    try:
+        orders = Order.objects.filter(invoice_number=invoice_number)
+    except Exception as e:
+        return None
+    
+    for order in orders:
+        mimicked_session_cart[str(order.product_code)] = order.quantity
+    
+    return generate_transaction_report(dealer_username=dealer_username, session_cart=mimicked_session_cart, type="VIEW", invoice_number=invoice_number)
