@@ -11,11 +11,6 @@ from order_management.support import (create_session_dict,
                                       retrieve_report, save_transaction)
 
 
-def test(request):
-    print(request)
-    return render(request, HOME)
-
-
 @login_required
 def add_product(request):
     if not is_employee(request):

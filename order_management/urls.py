@@ -2,11 +2,9 @@ from django.urls import path
 
 from order_management.views import (add_product, all_products,
                                     all_transactions, checkout, edit_product,
-                                    remove_product, test, view_transaction)
+                                    remove_product, view_transaction)
 
 urlpatterns = [
-    path('test/', test, name="test"),
-
     path('add_product/', add_product, name="add_product"),
     path('edit_product/', edit_product, name="edit_product"),
     path('remove_product/', remove_product, name="remove_product"),

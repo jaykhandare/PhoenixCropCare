@@ -1,2 +1,3 @@
 find/create suitable icon
 add docker support
+refine and use logging mechanism

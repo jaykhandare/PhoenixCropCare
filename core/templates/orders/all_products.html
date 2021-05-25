@@ -62,7 +62,7 @@
 												{% endif %}
 											</tr>
 										{% endfor %}
-										{% if request.user.is_authenticated %}
+										{% if request.user.is_authenticated and not is_staff %}
 											<button type="submit" class="btn btn-success">Checkout</button>
 										{% endif %}
 									</form>

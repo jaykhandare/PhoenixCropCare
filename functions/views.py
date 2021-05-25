@@ -9,7 +9,6 @@ from functions.models import Taxes
 from functions.support import get_taxes_objects
 
 
-@login_required
 def home_view(request):
     return render(request, HOME)
 

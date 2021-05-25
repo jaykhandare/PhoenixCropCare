@@ -6,7 +6,8 @@
             "type": "Bio Products",
             "name": "XML 1",
             "price": 23.6,
-            "uom" : "kgs"
+            "details": "",
+            "uom": "kgs"
         }
     },
     {
@@ -16,7 +17,8 @@
             "type": "Seeds",
             "name": "XML 23",
             "price": 11110.0,
-            "uom" : "bags"
+            "details": "",
+            "uom": "bags"
         }
     },
     {
@@ -26,7 +28,8 @@
             "type": "Water Soluble",
             "name": "JSON",
             "price": 12.564,
-            "uom" : "items"
+            "details": "",
+            "uom": "items"
         }
     },
     {
@@ -36,7 +39,196 @@
             "type": "Farming Consulting",
             "name": "JSON 455",
             "price": 789.35,
-            "uom" : "N/A"
+            "details": "",
+            "uom": "N/A"
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 1,
+        "fields": {
+            "invoice_number": 1,
+            "product_code": 1,
+            "quantity": 3,
+            "total_price": 70.8
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 2,
+        "fields": {
+            "invoice_number": 1,
+            "product_code": 2,
+            "quantity": 1,
+            "total_price": 11110.0
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 3,
+        "fields": {
+            "invoice_number": 1,
+            "product_code": 4,
+            "quantity": 1,
+            "total_price": 789.35
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 4,
+        "fields": {
+            "invoice_number": 2,
+            "product_code": 2,
+            "quantity": 2,
+            "total_price": 22220.0
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 5,
+        "fields": {
+            "invoice_number": 2,
+            "product_code": 3,
+            "quantity": 4,
+            "total_price": 50.26
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 6,
+        "fields": {
+            "invoice_number": 2,
+            "product_code": 4,
+            "quantity": 1,
+            "total_price": 789.35
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 7,
+        "fields": {
+            "invoice_number": 3,
+            "product_code": 1,
+            "quantity": 4,
+            "total_price": 94.4
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 8,
+        "fields": {
+            "invoice_number": 3,
+            "product_code": 3,
+            "quantity": 4,
+            "total_price": 50.26
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 9,
+        "fields": {
+            "invoice_number": 3,
+            "product_code": 4,
+            "quantity": 4,
+            "total_price": 3157.4
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 10,
+        "fields": {
+            "invoice_number": 4,
+            "product_code": 1,
+            "quantity": 3,
+            "total_price": 70.8
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 11,
+        "fields": {
+            "invoice_number": 4,
+            "product_code": 2,
+            "quantity": 4,
+            "total_price": 44440.0
+        }
+    },
+    {
+        "model": "order_management.order",
+        "pk": 12,
+        "fields": {
+            "invoice_number": 4,
+            "product_code": 3,
+            "quantity": 1,
+            "total_price": 12.56
+        }
+    },
+    {
+        "model": "order_management.transaction",
+        "pk": 1,
+        "fields": {
+            "invoice_number": 1,
+            "customer_code": "XYZ",
+            "mode_of_transport": "option3",
+            "total_pre_tax": 11970.15,
+            "discount_percent": 0.0,
+            "total_price_taxed": 12568.66,
+            "payment_type": "UPI",
+            "is_accepted": true,
+            "is_dispatched": false,
+            "is_closed": false,
+            "dateTime": "2021-05-25T15:03:04.252Z"
+        }
+    },
+    {
+        "model": "order_management.transaction",
+        "pk": 2,
+        "fields": {
+            "invoice_number": 2,
+            "customer_code": "XYZ",
+            "mode_of_transport": "option1",
+            "total_pre_tax": 23059.61,
+            "discount_percent": 0.0,
+            "total_price_taxed": 24212.59,
+            "payment_type": "Cash",
+            "is_accepted": true,
+            "is_dispatched": false,
+            "is_closed": false,
+            "dateTime": "2021-05-25T15:03:42.852Z"
+        }
+    },
+    {
+        "model": "order_management.transaction",
+        "pk": 3,
+        "fields": {
+            "invoice_number": 3,
+            "customer_code": "XYZ",
+            "mode_of_transport": "option2",
+            "total_pre_tax": 3302.06,
+            "discount_percent": 0.0,
+            "total_price_taxed": 3467.16,
+            "payment_type": "Check",
+            "is_accepted": true,
+            "is_dispatched": false,
+            "is_closed": false,
+            "dateTime": "2021-05-25T15:04:05.304Z"
+        }
+    },
+    {
+        "model": "order_management.transaction",
+        "pk": 4,
+        "fields": {
+            "invoice_number": 4,
+            "customer_code": "ABC",
+            "mode_of_transport": "option1",
+            "total_pre_tax": 44523.36,
+            "discount_percent": 0.0,
+            "total_price_taxed": 46749.53,
+            "payment_type": "UPI",
+            "is_accepted": true,
+            "is_dispatched": false,
+            "is_closed": false,
+            "dateTime": "2021-05-25T15:06:54.409Z"
         }
     }
 ]
