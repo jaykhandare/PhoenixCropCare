@@ -9,10 +9,11 @@ def get_taxes_objects():
 
     return Taxes.objects.all()
 
+
 def get_tax_variables():
     get_taxes_objects()
     SGST = Taxes.objects.get(name="SGST").rate
     CGST = Taxes.objects.get(name="CGST").rate
     IGST = Taxes.objects.get(name="IGST").rate
-    
+
     return (SGST, CGST, IGST)

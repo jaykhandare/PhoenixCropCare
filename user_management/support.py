@@ -2,11 +2,12 @@
     These functions support view functions and are kept here to keep views.py clean.
 """
 
-from user_management.models import Dealer_Profile
-from django.shortcuts import render
+from core.template_declarations import *
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
-from core.template_declarations import *
+from django.shortcuts import render
+
+from user_management.models import Dealer_Profile
 
 
 # used to differentiate among employees and authorized dealers
@@ -184,15 +185,17 @@ def save_data_and_respond(request=None, data=None, processing_type=None):
 
     if data['authorized'] in ["True", "1", 1, True] and len(data['first_name']) != 0 and len(data['last_name']) != 0:
         # create an user profile for dealer if he's authorized
-        username = data['first_name'].lower()[0] + data['last_name'].lower() + "404"
+        username = data['first_name'].lower(
+        )[0] + data['last_name'].lower() + "404"
         try:
             User.objects.get(username=username)
         except:
             try:
                 user_obj = User.objects.create(username=username,
-                                    password=make_password(username),
-                                    first_name=data['first_name'],
-                                    last_name=data['last_name'])
+                                               password=make_password(
+                                                   username),
+                                               first_name=data['first_name'],
+                                               last_name=data['last_name'])
                 user_obj.full_clean()
                 user_obj.save()
             except Exception as error_set:

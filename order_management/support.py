@@ -2,14 +2,15 @@
     These functions support view functions and are kept here to keep views.py clean.
 """
 
+import json
+from ast import literal_eval
+
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
-from ast import literal_eval
-from user_management.models import Dealer_Profile
-from order_management.models import Product, Order, Transaction
 from functions.support import get_tax_variables
-import json
+from user_management.models import Dealer_Profile
 
+from order_management.models import Order, Product, Transaction
 
 ROUND_UP = 2
 
@@ -52,7 +53,6 @@ def generate_transaction_report(dealer_username=None, session_cart=None, type=No
 
     # setting up tax variables
     SGST, CGST, IGST = get_tax_variables()
-
 
     for product_id, quantity in session_cart.items():
         product_obj = Product.objects.get(id=product_id)
@@ -131,7 +131,8 @@ def save_transaction(data=None):
     # add orders
     for order in orders:
         try:
-            order_obj = Order.objects.create(invoice_number=transaction_count, product_code=order['code'], quantity=order['quantity'], total_price=order['price'])
+            order_obj = Order.objects.create(
+                invoice_number=transaction_count, product_code=order['code'], quantity=order['quantity'], total_price=order['price'])
             order_obj.full_clean()
             order_obj.save()
         except Exception as e:
@@ -152,8 +153,8 @@ def retrieve_report(dealer_username=None, invoice_number=None):
         orders = Order.objects.filter(invoice_number=invoice_number)
     except Exception as e:
         return None
-    
+
     for order in orders:
         mimicked_session_cart[str(order.product_code)] = order.quantity
-    
+
     return generate_transaction_report(dealer_username=dealer_username, session_cart=mimicked_session_cart, type="VIEW", invoice_number=invoice_number)

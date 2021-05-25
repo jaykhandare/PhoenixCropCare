@@ -1,13 +1,15 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
-from authentication.forms import LoginForm, SignUpForm
-from django.contrib.auth.models import User
-from user_management.models import User_Profile
 from random import randint
-from core.settings import DEBUG
 
-from functions.views import home_view
+from core.settings import DEBUG
 from core.template_declarations import *
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.shortcuts import redirect, render
+from functions.views import home_view
+from user_management.models import User_Profile
+
+from authentication.forms import LoginForm, SignUpForm
+
 
 def register_user(request):
     msg = None

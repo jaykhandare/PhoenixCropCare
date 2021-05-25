@@ -1,16 +1,17 @@
-from django.shortcuts import redirect, render
-from django.contrib.auth.models import User
-from django.forms.models import model_to_dict
-from django.contrib.auth.decorators import login_required
-from django.core.files.storage import FileSystemStorage
-from core.settings import MEDIA_ROOT
-from PIL import Image
 from os import path
+
+from core.settings import MEDIA_ROOT
+from core.template_declarations import *
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.core.files.storage import FileSystemStorage
+from django.forms.models import model_to_dict
+from django.shortcuts import redirect, render
+from PIL import Image
 
 from user_management.forms import DealerDeleteForm, UserDeleteForm
 from user_management.models import Dealer_Profile, User_Profile
 from user_management.support import *
-from core.template_declarations import *
 
 
 @login_required
@@ -129,7 +130,7 @@ def profile(request):
         except Exception as e:
             print(e)
             return render(request, ERROR_500)
-        
+
         profile_obj.username = user_data['username']
         profile_obj.address = user_data['address']
         profile_obj.city = user_data['city']
@@ -149,7 +150,7 @@ def profile(request):
             err_response = ""
             for error in error_set:
                 err_response += error[0] + " : " + error[1][0] + "</br>"
-            
+
             file_name = './users/' + user_data['old_username'] + '.png'
             if fs.exists(file_name):
                 profile_picture_url = fs.url(file_name)
@@ -206,7 +207,8 @@ def remove_dealer(request):
         try:
             retrieved_dealer = Dealer_Profile.objects.get(
                 code=dealer['code'], managed_by=dealer['managed_by'])
-            username = retrieved_dealer.first_name.lower()[0] + retrieved_dealer.last_name.lower() + "404"
+            username = retrieved_dealer.first_name.lower(
+            )[0] + retrieved_dealer.last_name.lower() + "404"
             user_obj = User.objects.get(username=username)
         except Exception as e:
             print(e)

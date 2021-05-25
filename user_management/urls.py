@@ -1,5 +1,8 @@
 from django.urls import path
-from user_management.views import all_users, profile, remove_user, register_dealer, all_dealers, edit_dealer, remove_dealer
+
+from user_management.views import (all_dealers, all_users, edit_dealer,
+                                   profile, register_dealer, remove_dealer,
+                                   remove_user)
 
 urlpatterns = [
     path('all_users/', all_users, name="all_users"),

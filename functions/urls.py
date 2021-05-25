@@ -1,5 +1,6 @@
 from django.urls import path
-from functions.views import home_view, get_my_dealers, modify_tax_rates
+
+from functions.views import get_my_dealers, home_view, modify_tax_rates
 
 urlpatterns = [
     path('home/', home_view, name="home_view"),

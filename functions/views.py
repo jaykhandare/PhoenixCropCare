@@ -1,12 +1,13 @@
-from django.shortcuts import redirect, render
+from core.template_declarations import *
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render
+from user_management.models import Dealer_Profile
+from user_management.support import is_employee
+from user_management.views import all_dealers
 
 from functions.models import Taxes
 from functions.support import get_taxes_objects
-from user_management.support import is_employee
-from user_management.models import Dealer_Profile
-from user_management.views import all_dealers
-from core.template_declarations import *
+
 
 @login_required
 def home_view(request):
@@ -34,7 +35,7 @@ def get_my_dealers(request):
 @login_required
 def modify_tax_rates(request):
     if not is_employee(request):
-        return render(request, ERROR_403) 
+        return render(request, ERROR_403)
     taxes = get_taxes_objects()
     if request.method == "GET":
         return render(request, TAX_MODIFICATION, {"taxes": taxes})
@@ -54,6 +55,7 @@ def modify_tax_rates(request):
                 return render(request, ERROR_500)
         taxes = get_taxes_objects()
         return render(request, TAX_MODIFICATION, {"taxes": taxes, "msg": "Taxes updated"})
+
 
 @login_required
 def get_my_sales(request):
