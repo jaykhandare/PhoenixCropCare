@@ -1,5 +1,8 @@
 from django.urls import path
-from order_management.views import add_product, edit_product, remove_product, all_products, checkout, all_transactions, view_transaction, test
+
+from order_management.views import (add_product, all_products,
+                                    all_transactions, checkout, edit_product,
+                                    remove_product, test, view_transaction)
 
 urlpatterns = [
     path('test/', test, name="test"),

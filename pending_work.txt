@@ -1,4 +1,2 @@
-add functions in the sidebar for users
-add functions in the sidebar for dealers
-
 find/create suitable icon
+add docker support

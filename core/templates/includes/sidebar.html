@@ -2,29 +2,27 @@
 		<div class="sidebar sidebar-style-2" data-background-color="dark2">	
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 				<div class="sidebar-content">
-
-				{% if request.user.is_authenticated %}
 				{% load user_tags %}
+				{% if request.user.is_authenticated %}
 					<div class="user">
-						<div class="avatar-lg float-left mr-2">
-							<img src="{{ request.user.username|get_profile_picture }}" alt="..." class="avatar-img rounded-circle">
-						</div>
-						<div class="info">
-							<a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-								<span>
-									{{ request.user.username }}
-									<span class="user-level">
-										{{ request.user.email }}
+						{% if "404" not in request.user.username %}
+							<div class="avatar-lg float-left mr-2">
+								<img src="{{ request.user.username|get_profile_picture }}" alt="..." class="avatar-img rounded-circle">
+							</div>
+							<div class="info">
+								<a aria-expanded="true">
+									<span>
+										{{ request.user.username }}
+										<span class="user-level">
+											{{ request.user.email }}
+										</span>
 									</span>
-									<span class="caret"></span>
-								</span>
-							</a>
-							<div class="clearfix"></div>
+								</a>
+								<div class="clearfix"></div>
 
-							<div class="collapse in" id="collapseExample">
 								<ul class="nav">
 									<li>
-										<a href="{% url 'profile'%}?username={{request.user.username}}">
+										<a href="{% url 'profile' %}?username={{request.user.username}}">
 											<span class="link-collapse">My Profile</span>
 										</a>
 									</li>
@@ -35,57 +33,76 @@
 									</li>
 								</ul>
 							</div>
-						</div>
+						{% else %}
+							<a href="{% url 'logout' %}">
+								<button type="" class="btn btn-danger" >Logout</button>
+							</a>
+						{% endif %}
 					</div>
 					<ul class="nav nav-primary">
-						<li class="nav-item {% if 'index' in segment %} active {% endif %}">
-							<a data-toggle="collapse" href="#dashboard" class="collapsed" aria-expanded="false">
-								<i class="fas fa-home"></i>
-								<p>My Functions</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse" id="dashboard">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="/home/">
-											<span class="sub-item">Dashboard</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-						<li class="nav-section">
-							<span class="sidebar-mini-icon">
-								<i class="fa fa-ellipsis-h"></i>
-							</span>
-							<h4 class="text-section">Views</h4>
-						</li>
-						<li class="nav-item {% if 'ui-' in segment %} active {% endif %}">
-							<a data-toggle="collapse" href="#base">
+						{% if "404" not in request.user.username %}
+							<li class="nav-section">
+								<span class="sidebar-mini-icon">
+									<i class="fa fa-ellipsis-h"></i>
+								</span>
+								<h4 class="text-section">Views</h4>
+							</li>
+							<li class="nav-item">
+								<a href="{% url 'get_my_dealers' %}">
+									<i class="fas fa-layer-group"></i>
+									<p>My Dealers</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="">
+									<i class="fas fa-th-list"></i>
+									<p>My Sales</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{% url 'all_products' %}">
+									<i class="fas fa-map-marker-alt"></i>
+									<p>All Products</p>
+								</a>
+							</li>
+						{% else %}
+							<li class="nav-section">
+								<span class="sidebar-mini-icon">
+									<i class="fa fa-ellipsis-h"></i>
+								</span>
+								<h4 class="text-section">My Functions</h4>
+							</li>
+							<li class="nav-item">
+								<a href="{% url 'all_products' %}">
+									<i class="fas fa-layer-group"></i>
+									<p>Product Store</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{% url 'all_transactions' %}?username={{request.user.username}}">
+									<i class="fas fa-th-list"></i>
+									<p>My Orders</p>
+								</a>
+							</li>
+						{% endif %}
+					</ul>
+				{% else %}
+					<ul class="nav nav-primary">
+						<li class="nav-item">
+							<a href="{% url 'all_products' %}">
 								<i class="fas fa-layer-group"></i>
-								<p>My Dealers</p>
+								<p>Product Store</p>
 							</a>
 						</li>
-						<li class="nav-item {% if 'layout' in segment %} active {% endif %}">
-							<a data-toggle="collapse" href="#sidebarLayouts">
+						<li class="nav-item">
+							<a href="{% url 'test' %}">
 								<i class="fas fa-th-list"></i>
-								<p>My Sales</p>
-							</a>
-						</li>
-						<li class="nav-item {% if 'tables' in segment %} active {% endif %}">
-							<a data-toggle="collapse" href="#tables">
-								<i class="fas fa-table"></i>
-								<p>Total Sales</p>
-							</a>
-						</li>
-						<li class="nav-item {% if 'maps' in segment %} active {% endif %}">
-							<a data-toggle="collapse" href="#maps">
-								<i class="fas fa-map-marker-alt"></i>
-								<p>Hierarchy</p>
+								<p>Contact Us</p>
 							</a>
 						</li>
 					</ul>
-				{% endif %}	
+				{% endif %}
+
 				</div>
 			</div>
 		</div>

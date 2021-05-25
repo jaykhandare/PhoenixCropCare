@@ -12,14 +12,17 @@
 				<div class="card">
 					<div class="card-header">
 						<div class="card-title">
-
                             {% if msg %}
                                 <span class="text-danger">{{ msg | safe }}</span>
                             {% else %}
 								{% if is_staff %}
 								<span>All Products</span>
 								{% else %}
-                                <span>Please check and confirm the order</span>
+									{% if request.user.is_authenticated %}
+										<span>Please check and confirm the order</span>
+									{% else %}
+										<span>Please contact the sales manager to know more</span>
+									{% endif %}
 								{% endif %}
                             {% endif %}
 
@@ -31,7 +34,6 @@
 								<tbody>
 									<form method="post" action="">
 										{% csrf_token %}
-
 										{% for product in objects %}
 											<tr>
 												<td>{{ product.type }}</td>
@@ -40,9 +42,11 @@
 												<td> Product Info </td>
 												<td> pictureLink </td>
 												<td>
-													<div class="col-md-6 p-0">
-														<input type="number" min="0" class="form-control" name="quantity{{product.id}}" value="0">
-													</div>
+													{% if request.user.is_authenticated and not is_staff %}
+														<div class="col-md-6 p-0">
+															<input type="number" min="0" class="form-control" name="quantity{{product.id}}" value="0">
+														</div>
+													{% endif %}
 												</td>
 												{% if is_staff %}
 													<td>
@@ -58,7 +62,9 @@
 												{% endif %}
 											</tr>
 										{% endfor %}
-										<button type="submit" class="btn btn-success">Checkout</button>
+										{% if request.user.is_authenticated %}
+											<button type="submit" class="btn btn-success">Checkout</button>
+										{% endif %}
 									</form>
 								</tbody>
 							</table>

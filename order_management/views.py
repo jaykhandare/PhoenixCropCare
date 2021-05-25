@@ -1,9 +1,15 @@
-from django.shortcuts import redirect, render
-from django.contrib.auth.decorators import login_required
-from user_management.support import is_employee
-from order_management.models import Product, Transaction
-from order_management.support import create_session_dict, generate_transaction_report, save_transaction, retrieve_report
 from core.template_declarations import *
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.shortcuts import redirect, render
+from user_management.models import Dealer_Profile
+from user_management.support import is_employee
+
+from order_management.models import Product, Transaction
+from order_management.support import (create_session_dict,
+                                      generate_transaction_report,
+                                      retrieve_report, save_transaction)
+
 
 def test(request):
     print(request)
@@ -84,7 +90,6 @@ def add_products_from_csv(request):
     pass
 
 
-@login_required
 def all_products(request):
     objects = Product.objects.all()
     if request.method == "GET":
@@ -119,16 +124,21 @@ def checkout(request):
 def all_transactions(request):
     all_trans = None
     if request.method == "GET":
-        headers = ["invoice_number", "mode_of_transport", "total_pre_tax", "discount_percent", "total_price_taxed", "payment_type", "is_accepted", "is_dispatched", "is_closed", "dateTime", "actions"]
+        headers = ["actions", "invoice_number", "mode_of_transport", "total_pre_tax", "discount_percent",
+                   "total_price_taxed", "payment_type", "is_accepted", "is_dispatched", "is_closed", "dateTime"]
         if is_employee(request):
             all_trans = Transaction.objects.all()
         else:
             try:
-                all_trans = Transaction.objects.filter(customer_code=request.GET['customer_code'])
+                user_obj = User.objects.get(username=request.user.username)
+                dealer_obj = Dealer_Profile.objects.get(
+                    first_name=user_obj.first_name, last_name=user_obj.last_name)
+                all_trans = Transaction.objects.filter(
+                    customer_code=dealer_obj.code)
             except Exception as e:
                 print(e)
                 return render(request, ERROR_500)
-        return render(request, ALL_TRANSACTIONS, {"is_staff" : is_employee(request), "headers" : headers ,"transactions" : all_trans})
+        return render(request, ALL_TRANSACTIONS, {"is_staff": is_employee(request), "headers": headers, "transactions": all_trans})
 
     elif request.method == "POST":
         return render(request, ERROR_403)
@@ -137,7 +147,8 @@ def all_transactions(request):
 @login_required
 def view_transaction(request):
     if request.method == "GET":
-        report = retrieve_report(dealer_username=request.user.username, invoice_number=request.GET['invoice_number'])
+        report = retrieve_report(
+            dealer_username=request.user.username, invoice_number=request.GET['invoice_number'])
         if report is None:
             return render(request, ERROR_500)
         return render(request, VIEW_TRANSACTION, {"report": report})

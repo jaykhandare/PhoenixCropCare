@@ -77,18 +77,6 @@ def get_total_sales(request):
     return render(request, HOME)
 
 
-@login_required
-def get_my_position_hierarchy(request):
-    if not is_employee(request):
-        return render(request, ERROR_403)
-    if request.method == "POST":
-        return render(request, ERROR_404)
-
-    username = request.user.username
-
-    return render(request, HOME)
-
-
 def get_sales_rep_near_me(request):
     if request.method == "POST":
         return render(request, ERROR_404)
