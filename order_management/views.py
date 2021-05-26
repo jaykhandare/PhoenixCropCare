@@ -116,13 +116,20 @@ def checkout(request):
 
 
 @login_required
-def all_transactions(request):
-    all_trans = None
+def all_transactions(request, all_trans=None):
+    internal_call = False
     if request.method == "GET":
         headers = ["actions", "invoice_number", "mode_of_transport", "total_pre_tax", "discount_percent",
                    "total_price_taxed", "payment_type", "is_accepted", "is_dispatched", "is_closed", "dateTime"]
-        if is_employee(request):
+        # this shows all transactions
+        if is_employee(request) and all_trans is None:
             all_trans = Transaction.objects.all()
+        # this shows transactions sent from a different call
+        # mostly transactions of dealers under an employee
+        elif all_trans is not None:
+            internal_call = True
+            headers.pop(0)
+        # this shows transactions of a specific dealer to himself
         else:
             try:
                 user_obj = User.objects.get(username=request.user.username)
@@ -133,7 +140,7 @@ def all_transactions(request):
             except Exception as e:
                 print(e)
                 return render(request, ERROR_500)
-        return render(request, ALL_TRANSACTIONS, {"is_staff": is_employee(request), "headers": headers, "transactions": all_trans})
+        return render(request, ALL_TRANSACTIONS, {"is_staff": is_employee(request), "internal_call" : internal_call, "headers": headers, "transactions": all_trans})
 
     elif request.method == "POST":
         return render(request, ERROR_403)

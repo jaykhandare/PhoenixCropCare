@@ -43,11 +43,13 @@
 									<tbody>
 										{% for transaction in transactions %}
 											<tr>
-												<td>
+												{% if not internal_call %}
+													<td>
 														<button type="button" data-toggle="tooltip" title="view transaction" class="btn btn-link btn-danger" data-original-title="Edit">
 															<a href="{% url 'view_transaction'%}?invoice_number={{transaction.invoice_number}}"> <i class="fa fa-expand"></i> </a>
 														</button>
-												</td>
+													</td>
+												{% endif %}
 												<td>{{transaction.invoice_number}}</td>
 												<td>{{transaction.mode_of_transport}}</td>
 												<td>{{transaction.total_pre_tax}}</td>

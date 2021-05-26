@@ -54,7 +54,7 @@
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="">
+								<a href="{% url 'get_my_sales' %}">
 									<i class="fas fa-th-list"></i>
 									<p>My Sales</p>
 								</a>
@@ -63,6 +63,12 @@
 								<a href="{% url 'all_products' %}">
 									<i class="fas fa-map-marker-alt"></i>
 									<p>All Products</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="{% url 'modify_tax_rates' %}">
+									<i class="fas fa-map-marker-alt"></i>
+									<p>Modify Tax Percents</p>
 								</a>
 							</li>
 						{% else %}

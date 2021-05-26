@@ -1,9 +1,11 @@
+from order_management.models import Transaction
 from core.template_declarations import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from user_management.models import Dealer_Profile
 from user_management.support import is_employee
 from user_management.views import all_dealers
+from order_management.views import all_transactions
 
 from functions.models import Taxes
 from functions.support import get_taxes_objects
@@ -62,27 +64,28 @@ def get_my_sales(request):
         return render(request, ERROR_403)
     if request.method == "POST":
         return render(request, ERROR_404)
-
     username = request.user.username
-
-    return render(request, HOME)
+    all_trans = []
+    try:
+        dealers = Dealer_Profile.objects.filter(managed_by=username)
+        for dealer in dealers:
+            trans = Transaction.objects.filter(customer_code=dealer.code)
+            all_trans.extend(trans)
+    except Exception as e:
+        print(e)
+        return render(request, ERROR_500)
+    
+    return all_transactions(request, all_trans)
 
 
 @login_required
-def get_total_sales(request):
+def employee_performance(request):
+    # this function will return a aggregated view of work done by employees
+    # this will include the dealers acquired and total cash inflow from them
+    # can be later modified to add other parameters
     if not is_employee(request):
         return render(request, ERROR_403)
     if request.method == "POST":
         return render(request, ERROR_404)
-
-    return render(request, HOME)
-
-
-def get_sales_rep_near_me(request):
-    if request.method == "POST":
-        return render(request, ERROR_404)
-
-    taluka = request.GET['taluka']
-    district = request.GET['district']
 
     return render(request, HOME)

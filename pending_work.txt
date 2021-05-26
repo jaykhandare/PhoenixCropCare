@@ -1,3 +1,18 @@
+links and functions to make accessible through frontend
+    functions
+        modify_tax_rates    DONE
+        get_my_sales        DONE
+        employee_performance
+
+    order_management
+        add_product
+        add_products_from_csv
+
+    user_management
+        all_users
+        all_dealers
+        register_dealer
+
 find/create suitable icon
 add docker support
 refine and use logging mechanism

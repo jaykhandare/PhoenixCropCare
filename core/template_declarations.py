@@ -12,7 +12,7 @@ USER_LOGOUT     = "accounts/logout.html"
 USER_DELETE     = "accounts/delete_form.html"
 USER_PROFILE    = "accounts/profile.html"
 HOME            = "accounts/home.html"
-PROFILE_TABLE   = "accounts/entity_display.html"
+PROFILE_TABLE   = "accounts/groups_entity.html"
 
 DEALER_REG_EDIT = "dealers/register_edit.html"
 DEALER_DELETE   = "dealers/delete_form.html"
