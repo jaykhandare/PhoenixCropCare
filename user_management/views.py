@@ -23,7 +23,7 @@ def all_users(request):
         all_users_data = User.objects.all()
         headers = ["Username", "First Name", "Last Name",
                    "Email", "Last Active", "Actions for account", ]
-        return render(request, PROFILE_TABLE, {"data": all_users_data, "headers": headers, "type": "users"})
+        return render(request, USER_PROFILES, {"data": all_users_data, "headers": headers, "type": "users"})
     else:
         return render(request, ERROR_404)
 
@@ -43,7 +43,7 @@ def all_dealers(request, internal_call=None, data=None):
                 dealers_data = data
         headers = ["Code", "First Name", "Last Name", "Firm Name",
                    "Contact", "Managed By", "Authorized", "Actions for account"]
-        return render(request, PROFILE_TABLE, {"data": dealers_data, "headers": headers, "type": "dealers"})
+        return render(request, USER_PROFILES, {"data": dealers_data, "headers": headers, "type": "dealers"})
     else:
         return render(request, ERROR_404)
 

@@ -1,7 +1,7 @@
 links and functions to make accessible through frontend
     functions
-        modify_tax_rates    DONE
-        get_my_sales        DONE
+        modify_tax_rates        DONE
+        get_my_sales            DONE
         employee_performance
 
     order_management

@@ -140,7 +140,7 @@ def all_transactions(request, all_trans=None):
             except Exception as e:
                 print(e)
                 return render(request, ERROR_500)
-        return render(request, ALL_TRANSACTIONS, {"is_staff": is_employee(request), "internal_call" : internal_call, "headers": headers, "transactions": all_trans})
+        return render(request, ORDER_ALL_TRANS, {"is_staff": is_employee(request), "internal_call" : internal_call, "headers": headers, "transactions": all_trans})
 
     elif request.method == "POST":
         return render(request, ERROR_403)
@@ -153,7 +153,7 @@ def view_transaction(request):
             dealer_username=request.user.username, invoice_number=request.GET['invoice_number'])
         if report is None:
             return render(request, ERROR_500)
-        return render(request, VIEW_TRANSACTION, {"report": report})
+        return render(request, ORDER_VIEW_TRANS, {"report": report})
 
     elif request.method == "POST":
         return render(request, ERROR_403)

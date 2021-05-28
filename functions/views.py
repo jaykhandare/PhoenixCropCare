@@ -12,7 +12,7 @@ from functions.support import get_taxes_objects
 
 
 def home_view(request):
-    return render(request, HOME)
+    return render(request, FUNCTIONS_HOME)
 
 
 @login_required
@@ -39,13 +39,13 @@ def modify_tax_rates(request):
         return render(request, ERROR_403)
     taxes = get_taxes_objects()
     if request.method == "GET":
-        return render(request, TAX_MODIFICATION, {"taxes": taxes})
+        return render(request, FUNCTIONS_TAX_MODIFY, {"taxes": taxes})
     elif request.method == "POST":
         data = request.POST.dict()
         data.pop('csrfmiddlewaretoken')
         for id, rate in data.items():
             if float(rate) > 100:
-                return render(request, TAX_MODIFICATION, {"taxes": taxes, "msg": "tax cannot be more than 100 for"})
+                return render(request, FUNCTIONS_TAX_MODIFY, {"taxes": taxes, "msg": "tax cannot be more than 100 for"})
             try:
                 tax_obj = Taxes.objects.get(id=id)
                 tax_obj.rate = rate
@@ -55,7 +55,7 @@ def modify_tax_rates(request):
                 print(e)
                 return render(request, ERROR_500)
         taxes = get_taxes_objects()
-        return render(request, TAX_MODIFICATION, {"taxes": taxes, "msg": "Taxes updated"})
+        return render(request, FUNCTIONS_TAX_MODIFY, {"taxes": taxes, "msg": "Taxes updated"})
 
 
 @login_required
@@ -74,7 +74,7 @@ def get_my_sales(request):
     except Exception as e:
         print(e)
         return render(request, ERROR_500)
-    
+
     return all_transactions(request, all_trans)
 
 
@@ -88,4 +88,23 @@ def employee_performance(request):
     if request.method == "POST":
         return render(request, ERROR_404)
 
-    return render(request, HOME)
+    return render(request, FUNCTIONS_HOME)
+
+
+@login_required
+def management(request):
+    if not is_employee(request):
+        return render(request, ERROR_403)
+    if request.method == "GET":
+        # this would be easier if all these links are simply put in HTML itself
+        # but we are putting it here to make it more dynamic so that we don't need to modify HTML
+        labels = ("All Users", "Add Employee", "Remove Employee", "Edit Employee Details",
+                  "All Dealers", "Add Dealer", "Remove Dealer", "Edi Dealer Details",
+                  "All Products", "Add New Product", "Edit Product Details", "Remove a Product", 
+                  "All Transactions", "View a Transaction",
+                  "Tax Rates Modification", "Employee Performance",
+                  )
+        links = []
+        return render(request, FUNCTIONS_MNGT_TASK, {"labels": labels, "links": links})
+    elif request.method == "POST":
+        return render(request, ERROR_404)
